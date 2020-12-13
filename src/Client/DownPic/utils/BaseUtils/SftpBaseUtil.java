@@ -1,6 +1,8 @@
 package Client.DownPic.utils.BaseUtils;
 
+import Client.DownPic.listener.RequestFinishListener;
 import com.jcraft.jsch.*;
+import entity.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +12,22 @@ import java.util.Properties;
 
 public class SftpBaseUtil {
 
-    private static final String REMOTE_HOST = "192.168.88.1";
-    private static final String USERNAME = "jola";
-    private static final String PASSWORD = "jxda7797797";
-    private static final String REMOTE_PORT = "22";   //ssh协议默认端口
+    private static Server server = new Server();
+    private static final Server DEFAULT_SERVER = new Server("192,168,88,1", "22", "jola", "jxda7797797", "/home/jola");
     private static final int SESSION_TIMEOUT = 60000; //session超时时间
     private static final int CHANNEL_TIMEOUT = 5000; //管道流超时时间
     static Session session = null;
 
-    private static final String PATH = "/home/jol/wallpaper";
-    private static final String NAME = "settings";
+    private static final int Log = 1;
+    private static final int Ex = 0;
 
-    public static ChannelSftp getConnectIP() {
+
+    public static ChannelSftp getConnectIP(RequestFinishListener listener) {
         int port = 0;
+        String REMOTE_PORT = server.Port;
+        String REMOTE_HOST = server.Host;
+        String USERNAME = server.Username;
+        String PASSWORD = server.Password;
         if (!("".equals(REMOTE_PORT)) && REMOTE_PORT != null) {
             port = Integer.parseInt(REMOTE_PORT);
         }
@@ -43,8 +48,13 @@ public class SftpBaseUtil {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
+            listener.log(USERNAME);
+//            LogBaseUtil.saveLog(Log, "连接服务器 :" + USERNAME + " 成功");
         } catch (Exception e) {
             e.printStackTrace();
+            listener.error(e);
+//            LogBaseUtil.saveLog(Log, "连接服务器失败, 异常信息请查看error文件");
+//            LogBaseUtil.saveLog(Ex, "连接服务器 :" + USERNAME + " 异常:" + e.toString());
         }
         return sftp;
     }
@@ -71,8 +81,11 @@ public class SftpBaseUtil {
             fis.close();
         } catch (Exception e) {
             e.printStackTrace();
+            LogBaseUtil.saveLog(Log, "上传图片失败, 异常信息请查看error文件");
+            LogBaseUtil.saveLog(Ex, "上传图片异常:" + e.toString());
             return success;
         }
+        LogBaseUtil.saveLog(Log, "上传图片成功,图片名为:" + saveFileName +", 保存路径为:" + directory);
         return success;
     }
 
@@ -127,6 +140,7 @@ public class SftpBaseUtil {
         if(sftp.isConnected()){
             session.disconnect();
             sftp.disconnect();
+            LogBaseUtil.saveLog(Log, "断开连接成功");
         }
     }
 
@@ -144,12 +158,22 @@ public class SftpBaseUtil {
     }
 
 
-    public static void setServerData(){
-        ;
+    public static void setServerData(Server server){
+        setServerData(server.Host, server.Port, server.Username, server.Password, server.url);
     }
 
+    public static void setServerData(String remote_host, String remote_port, String username, String password, String path){
+        server.setHost(remote_host);
+        server.setPort(remote_port);
+        server.setUsername(username);
+        server.setPassword(password);
+        server.setUrl(path);
+    }
+
+
+
     public static void clearServerData(){
-        ;
+        server = DEFAULT_SERVER;
     }
 
 

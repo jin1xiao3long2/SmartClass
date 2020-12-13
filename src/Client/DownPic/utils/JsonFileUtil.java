@@ -1,9 +1,6 @@
 package Client.DownPic.utils;
 
 import Client.DownPic.utils.BaseUtils.FileBaseUtil;
-import entity.MainUser;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 public class JsonFileUtil {
 

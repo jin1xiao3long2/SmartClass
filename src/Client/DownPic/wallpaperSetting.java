@@ -1,6 +1,8 @@
 package Client.DownPic;
 
+import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
+import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import Client.DownPic.utils.BaseUtils.SftpBaseUtil;
 import Client.DownPic.utils.JsonFileUtil;
 import Client.ui.Change.change;
@@ -17,13 +19,13 @@ public class wallpaperSetting {
 
     private String projectPath = new String();
     private String imgsPath = new String();
-    private SysWallpaperFile writeFile = new SysWallpaperFile();
+    private ServerFile writeFile = new ServerFile();
     private final String nameBase = "xxx";
-    private MainUser mainUser = new MainUser();
+    private AdminFile mainUser = new AdminFile();
 
-    public boolean init(entity.Server server, MainUser mainUser) {
+    public void init(entity.Server server, AdminFile mainUser) {
         //find path
-        projectPath = mainUser.getFilepath();
+//        projectPath = mainUser.getFilepath();
         this.mainUser = mainUser;
         //create dirs
         String wallpaperDir = projectPath + "\\wallpaper";
@@ -46,16 +48,17 @@ public class wallpaperSetting {
             }
         }
         //write file
-        writeFile.setServer(server);
-        List<SysWallpaperImg> imgs = new ArrayList<>();
-        writeFile.setImgs(imgs);
-        Map<entity.User, SysWallpaperImg> map = new HashMap<>();
-        writeFile.setMap(map);
-        String text = JsonBaseUtil.ObjtoSting(writeFile);
-        JsonFileUtil.changeJsonInfo(wallpaperDir, text);
+//        writeFile.setServer(server);
+//        List<ServerImg> imgs = new ArrayList<>();
+//        writeFile.setImgs(imgs);
+//        Map<entity.User, ServerImg> map = new HashMap<>();
+//        writeFile.setMap(map);
+//        String text = JsonBaseUtil.ObjtoSting(writeFile);
+//        JsonFileUtil.changeJsonInfo(wallpaperDir, text);
         //
-        return true;
+
     }
+
 
     /**
      * @param id   用于数据库拓展
@@ -67,7 +70,7 @@ public class wallpaperSetting {
     public boolean uploadPic(String uploadFilename) {
         //get info buffer
         //get fileList
-        String settingFilePath = mainUser.getFilepath() + "\\wallpaper";
+//        String settingFilePath = mainUser.getFilepath() + "\\wallpaper";
 
         JSONObject settingObj = JSONObject.fromObject(JsonFileUtil.getJsonInfo(projectPath + "\\wallpaper"));
         JSONArray imgs = settingObj.getJSONArray("imgs");
@@ -80,6 +83,7 @@ public class wallpaperSetting {
                 fileList.add(filename);
         }
 
+
         //check backwords
         int index = uploadFilename.indexOf('.');
         String backwords = uploadFilename.substring(index, uploadFilename.length());
@@ -87,12 +91,22 @@ public class wallpaperSetting {
         //checkname
         int fileid =  checkName(fileList);
         String uploadName = nameBase + fileid + backwords;
-        SysWallpaperImg img = new SysWallpaperImg();
+        ServerImg img = new ServerImg();
         img.setId(fileid);
-        img.setFilename(uploadName);
+        img.setUrl(uploadName);
 
         //sftp.add
-        ChannelSftp sftp = SftpBaseUtil.getConnectIP();
+        ChannelSftp sftp = SftpBaseUtil.getConnectIP(new RequestFinishListener() {
+            @Override
+            public void log(String response) {
+//                LogBaseUtil.saveLog(SUCCESS);
+            }
+
+            @Override
+            public void error(Exception ex) {
+
+            }
+        });
         if(SftpBaseUtil.upload(((JSONObject)settingObj.get("server")).getString("path"), uploadFilename, uploadName, sftp)){
             ;
             //listener
@@ -105,7 +119,7 @@ public class wallpaperSetting {
         //file.add(pic)
         try{
             JsonBaseUtil.addDataInArr(settingObj, "imgs", (Object)img);
-            JsonFileUtil.changeJsonInfo(settingFilePath, settingObj.toString());
+//            JsonFileUtil.changeJsonInfo(settingFilePath, settingObj.toString());
         }catch (Exception e){
             e.printStackTrace();
             //listener

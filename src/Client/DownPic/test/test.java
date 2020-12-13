@@ -1,45 +1,31 @@
 package Client.DownPic.test;
 
-import Client.DownPic.utils.CommUtil;
+import Client.DownPic.utils.BaseUtils.FileBaseUtil;
+import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import Client.DownPic.wallpaperSetting;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
-import entity.MainUser;
-import entity.Server;
-import entity.SysWallpaperFile;
-import entity.SysWallpaperImg;
+import entity.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class test {
-    @Test
-    public void test1(){
-        int[] a = {1,3,5,2,43,22,76,33,21,-1};
-        System.out.println(CommUtil.getMax(a));
-    }
-
-    @Test
-    public void test2(){
-        try{
-            CommUtil.saveLog(1, "message");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void test3(){
         try{
-            SysWallpaperImg img = new SysWallpaperImg();
+            ServerImg img = new ServerImg();
             img.setId(1);
 //            img.setUrl("abc");
-            SysWallpaperImg img2 = new SysWallpaperImg();
+            ServerImg img2 = new ServerImg();
             img2.setId(2);
 //            img2.setUrl("def");
-            SysWallpaperFile file = new SysWallpaperFile();
+            ServerFile file = new ServerFile();
 //            file.addImg(img);
 //            file.addImg(img2);
             String str1 = JsonBaseUtil.ObjtoSting(img);
@@ -76,26 +62,52 @@ public class test {
         server.setPort("22");
         server.setUsername("jol");
         server.setPassword("jxda7797797");
-        server.setPath("/home/jola/wallpaper");
-        entity.MainUser mainUser = new MainUser();
-        mainUser.setFilepath("D:\\JAVAProjects\\SmartClass");
-        wallpaperSetting MainSetting = new wallpaperSetting();
-        boolean result = MainSetting.init(server, mainUser);
-        MainSetting.uploadPic(mainUser.getFilepath()+"\\wallpaper\\imgs\\1.jpg");
+        server.setUrl("/home/jola/wallpaper");
+        AdminFile mainUser = new AdminFile();
+//        mainUser.setFilepath("D:\\JAVAProjects\\SmartClass");
+//        wallpaperSetting MainSetting = new wallpaperSetting();
+//        MainSetting.init(server, mainUser);
+//        LogBaseUtil.init(mainUser.getFilepath());
+//        MainSetting.uploadPic(mainUser.getFilepath()+"\\wallpaper\\imgs\\1.jpg");
     }
 
     @Test
     public void test5(){
-        String uploadFilename = "1.jpg";
-        int index = uploadFilename.indexOf('.');
-        String backwords = uploadFilename.substring(index, uploadFilename.length());
-        System.out.println(backwords);
-
+        FileBaseUtil.writeFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
+        FileBaseUtil.appendFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
+        FileBaseUtil.appendlnFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
+        FileBaseUtil.appendFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
     }
 
     class Foo{
-        public String name;
         public String key;
+        public String name;
+
+        public Foo(String key, String name) {
+            this.key = key;
+            this.name = name;
+        }
+
+        public Foo() {
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+
     }
 
     @Test
@@ -103,6 +115,8 @@ public class test {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "value");
         jsonObject.put("key", "123");
+        Foo foo =(Foo) JSONObject.toBean(jsonObject, Foo.class);
+        System.out.println(foo.name + foo.key);
         JSONArray array = new JSONArray();
         array.add(jsonObject);
         jsonObject.put("name", "vvallue");
@@ -127,6 +141,32 @@ public class test {
 //        System.out.println("List is : " + list);
         JsonBaseUtil.delDataInArr(mainObj, "arr", "name", (Object)"value");
         System.out.println(mainObj);
+
+    }
+
+    @Test
+    public void test7(){
+        Server server = new Server("host","port","username","password","filepath");
+        String URL_ROOT = "URL_ROOT";
+        AdminFile adminFile = new AdminFile();
+        adminFile = new AdminFile();
+        adminFile.setSERVER(server);
+        List<User> users = new ArrayList<>();
+        adminFile.setUSERS(users);
+        Map<User, ServerImg> map = new HashMap<>();
+        adminFile.setMaps(map);
+        adminFile.setURL_ROOT(URL_ROOT);
+        JSONObject obj = JSONObject.fromObject(adminFile);
+        System.out.println(obj);
+
+        User user = new User();
+        user.setUrl("URL");
+        user.setName("name");
+        obj.getJSONArray("USERS").add(JSONObject.fromObject(user));
+        System.out.println(obj);
+
+        AdminFile newfile = (AdminFile) JSONObject.toBean(obj, AdminFile.class);
+        System.out.println(newfile.getURL_ROOT());
     }
 
 }

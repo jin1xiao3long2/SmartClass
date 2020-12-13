@@ -1,15 +1,16 @@
 package Client.DownPic.utils.BaseUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class FileBaseUtil {
 
 
     /**
      * 获取文本内容
+     *
      * @param path 路径名
-     * @return
-     *       str --json所有信息
+     * @return str --json所有信息
      */
 
     public static String ReadFile(String path) {
@@ -39,31 +40,70 @@ public class FileBaseUtil {
                 }
             }
         }
-        System.out.println("Laststr is: " + laststr);
         return laststr;
     }
 
     /**
-     * json字符串写入文件
+     * 字符串写入文件
+     *
      * @param filePath 路径名
-     * @param sets      写入的信息
-     * @return
-     *       true  --成功
-     *       flase --失败
+     * @param text     写入的信息
+     * @return true  --成功
+     * flase --失败
      */
-    public static boolean writeFile(String filePath, String sets) {
-        FileWriter fw = null;
+    public static boolean writeFile(String filePath, String text) {
+        return writeFileBase(filePath, text, false, false);
+    }
+
+    /**
+     * 字符串追加文件
+     *
+     * @param filePath 路径名
+     * @param text     写入的信息
+     * @return true  --成功
+     * flase --失败
+     */
+    public static boolean appendFile(String filepath, String text) {
+        return writeFileBase(filepath, text, true, false);
+    }
+
+    /**
+     * 字符串写入文件并换行
+     *
+     * @param filePath 路径名
+     * @param text     写入的信息
+     * @return true  --成功
+     * flase --失败
+     */
+    public static boolean appendlnFile(String filepath, String text) {
+        return writeFileBase(filepath, text, true, true);
+    }
+
+    /**
+     * 写文件base
+     *
+     * @param filePath   文件名
+     * @param text       写入字符
+     * @param is_append  是否为追加模式
+     * @param is_newline 是否换行
+     * @return
+     */
+    private static boolean writeFileBase(String filePath, String text, boolean is_append, boolean is_newline) {
+        File file = null;
         try {
-            fw = new FileWriter(filePath);
-            PrintWriter out = new PrintWriter(fw);
-            out.write(sets);
-            out.println();
+            file = new File(filePath);
+            FileOutputStream out = new FileOutputStream(file, is_append);
+            StringBuffer sb = new StringBuffer(text);
+            if (is_newline)
+                sb.append("\r\n");
+            out.write(sb.toString().getBytes(StandardCharsets.UTF_8));
+            out.flush();
             out.close();
-            fw.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 }

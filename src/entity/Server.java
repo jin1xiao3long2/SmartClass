@@ -5,14 +5,14 @@ public class Server {
     public String Port = null;
     public String Username = null;
     public String Password = null;
-    public String path = null;
+    public String url = null;
 
-    public String getPath() {
-        return path;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getHost() {
@@ -41,6 +41,17 @@ public class Server {
 
     public String getPassword() {
         return Password;
+    }
+
+    public Server(String host, String port, String username, String password, String path) {
+        Host = host;
+        Port = port;
+        Username = username;
+        Password = password;
+        this.url = path;
+    }
+
+    public Server() {
     }
 
     public void setPassword(String password) {

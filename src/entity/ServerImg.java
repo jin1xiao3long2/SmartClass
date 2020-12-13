@@ -1,13 +1,13 @@
 package entity;
 
-public class SysWallpaperImg {
+public class ServerImg {
 
     /**
      * id唯一匹配信息
      * filename作为搜索信息
      */
     private int id;
-    private String filename;
+    private String url;
 
     public int getId() {
         return id;
@@ -17,11 +17,11 @@ public class SysWallpaperImg {
         this.id = id;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getUrl() {
+        return url;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
