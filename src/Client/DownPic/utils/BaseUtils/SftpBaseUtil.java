@@ -3,6 +3,7 @@ package Client.DownPic.utils.BaseUtils;
 import Client.DownPic.listener.RequestFinishListener;
 import com.jcraft.jsch.*;
 import entity.Server;
+import org.apache.commons.io.IOUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SftpBaseUtil {
     private static final int Ex = 0;
 
 
-    public static ChannelSftp getConnectIP(RequestFinishListener listener) {
+    public static ChannelSftp getConnectIP() {
         int port = 0;
         String REMOTE_PORT = server.PORT;
         String REMOTE_HOST = server.HOST;
@@ -48,11 +49,11 @@ public class SftpBaseUtil {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
-            listener.log(USERNAME);
+//            listener.log(USERNAME);
 //            LogBaseUtil.saveLog(Log, "连接服务器 :" + USERNAME + " 成功");
         } catch (Exception e) {
             e.printStackTrace();
-            listener.error(e);
+//            listener.error(e);
 //            LogBaseUtil.saveLog(Log, "连接服务器失败, 异常信息请查看error文件");
 //            LogBaseUtil.saveLog(Ex, "连接服务器 :" + USERNAME + " 异常:" + e.toString());
         }
@@ -62,10 +63,10 @@ public class SftpBaseUtil {
     /**
      * 上传文件
      *
-     * @param directory  服务器储存目录
+     * @param directory      服务器储存目录
      * @param uploadFileName 上传文件路径
-     * @param saveFileName    被保存的文件名
-     * @param sftp       sftp
+     * @param saveFileName   被保存的文件名
+     * @param sftp           sftp
      * @return true --上传成功
      * false --上传失败
      */
@@ -81,11 +82,8 @@ public class SftpBaseUtil {
             fis.close();
         } catch (Exception e) {
             e.printStackTrace();
-            LogBaseUtil.saveLog(Log, "上传图片失败, 异常信息请查看error文件");
-            LogBaseUtil.saveLog(Ex, "上传图片异常:" + e.toString());
             return success;
         }
-        LogBaseUtil.saveLog(Log, "上传图片成功,图片名为:" + saveFileName +", 保存路径为:" + directory);
         return success;
     }
 
@@ -112,8 +110,18 @@ public class SftpBaseUtil {
         return success;
     }
 
+    public static byte[] downloadBybyte(String directory, String downloadFile, String saveFile, ChannelSftp sftp) throws SftpException, IOException {
+        if (directory != null && !"".equals(directory)) {
+            sftp.cd(directory);
+        }
+        InputStream is = sftp.get(downloadFile);
+        byte[] fileData = IOUtils.toByteArray(is);
+        return fileData;
+    }
+
     /**
      * 查看
+     *
      * @param directory
      * @param sftp
      * @return
@@ -136,35 +144,36 @@ public class SftpBaseUtil {
         return fileList;
     }
 
-    public static void disconnect(ChannelSftp sftp){
-        if(sftp.isConnected()){
+
+    public static void disconnect(ChannelSftp sftp) {
+        if (sftp.isConnected()) {
             session.disconnect();
             sftp.disconnect();
             LogBaseUtil.saveLog(Log, "断开连接成功");
         }
     }
 
-    public static boolean delete(String directory, String deleteFile, ChannelSftp sftp, RequestFinishListener listener){
+    public static boolean delete(String directory, String deleteFile, ChannelSftp sftp) {
         boolean success = false;
         try {
             sftp.cd(directory);
             sftp.rm(deleteFile);
-            listener.log(deleteFile);
+//            listener.log(deleteFile);
             success = true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            listener.error(e);
+//            listener.error(e);
             return success;
         }
         return success;
     }
 
 
-    public static void setServerData(Server server){
+    public static void setServerData(Server server) {
         setServerData(server.HOST, server.PORT, server.USERNAME, server.PASSWORD, server.HTTP_ROOT);
     }
 
-    public static void setServerData(String remote_host, String remote_port, String username, String password, String path){
+    public static void setServerData(String remote_host, String remote_port, String username, String password, String path) {
         server.setHOST(remote_host);
         server.setPORT(remote_port);
         server.setUSERNAME(username);
@@ -173,8 +182,7 @@ public class SftpBaseUtil {
     }
 
 
-
-    public static void clearServerData(){
+    public static void clearServerData() {
         server = DEFAULT_SERVER;
     }
 

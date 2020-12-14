@@ -1,5 +1,7 @@
 package Client.DownPic.test;
 
+import Client.Admin.AdminwallpaperSetting;
+import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.FileBaseUtil;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
 import entity.*;
@@ -20,10 +22,10 @@ public class test {
     public void test3(){
         try{
             ServerImg img = new ServerImg();
-            img.setId(1);
+//            img.setId(1);
 //            img.setUrl("abc");
             ServerImg img2 = new ServerImg();
-            img2.setId(2);
+//            img2.setId(2);
 //            img2.setUrl("def");
             ServerFile file = new ServerFile();
 //            file.addImg(img);
@@ -144,27 +146,43 @@ public class test {
 
     @Test
     public void test7(){
-        Server server = new Server("host","port","username","password","filepath");
-        java.lang.String URL_ROOT = "URL_ROOT";
+        Admin admin = new Admin();
+        String projectPath = "D:\\JAVAProjects\\SmartClass";
         AdminFile adminFile = new AdminFile();
-        adminFile = new AdminFile();
-        adminFile.setSERVER(server);
-        List<User> users = new ArrayList<>();
-        adminFile.setUSERS(users);
-        Map<User, String> map = new HashMap<>();
-        adminFile.setMap(map);
-        adminFile.setUSER_ROOT(URL_ROOT);
-        JSONObject obj = JSONObject.fromObject(adminFile);
-        System.out.println(obj);
+        admin.setProjectPath(projectPath);
+        admin.setAdminFile(adminFile);
+        AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
 
-        User user = new User();
-        user.setUrl("URL");
-        user.setName("name");
-        obj.getJSONArray("USERS").add(JSONObject.fromObject(user));
-        System.out.println(obj);
+        try{
+            mainApp.init(admin, new RequestFinishListener() {
+                @Override
+                public void log(String response) {
+                    System.out.println(response);
+                }
 
-        AdminFile newfile = (AdminFile) JSONObject.toBean(obj, AdminFile.class);
-        System.out.println(newfile.getUSER_ROOT());
+                @Override
+                public void error(Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+        }catch (Exception e){
+//
+            e.printStackTrace();
+        }
+
+//        修改server
+        Server server = setServer("192.168.26.1","22", "jola", "jxda7797797", "/home/jola/projectPath");
+        mainApp.setServer(server);
+        System.out.println(JsonBaseUtil.ObjtoSting(mainApp.getServer()));
     }
 
+    private static Server setServer(String host, String port, String username, String password, String http_root){
+        Server server = new Server();
+        server.setHOST(host);
+        server.setPORT(port);
+        server.setUSERNAME(username);
+        server.setPASSWORD(password);
+        server.setHTTP_ROOT(http_root);
+        return server;
+    }
 }

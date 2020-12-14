@@ -1,9 +1,7 @@
 package Client.DownPic;
 
-import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
 import Client.DownPic.utils.BaseUtils.SftpBaseUtil;
-import Client.DownPic.utils.JsonFileUtil;
 import Client.ui.Change.change;
 import com.jcraft.jsch.ChannelSftp;
 import entity.*;
@@ -72,7 +70,8 @@ public class wallpaperSetting {
         //get fileList
 //        String settingFilePath = mainUser.getFilepath() + "\\wallpaper";
 
-        JSONObject settingObj = JSONObject.fromObject(JsonFileUtil.getJsonInfo(projectPath + "\\wallpaper"));
+        JSONObject settingObj = null;
+//        JSONObject.fromObject(JsonFileUtil.getJsonInfo(projectPath + "\\wallpaper"));
         JSONArray imgs = settingObj.getJSONArray("imgs");
         int length = imgs.size();
         List<java.lang.String> fileList = new ArrayList<>();
@@ -92,21 +91,11 @@ public class wallpaperSetting {
         int fileid =  checkName(fileList);
         java.lang.String uploadName = nameBase + fileid + backwords;
         ServerImg img = new ServerImg();
-        img.setId(fileid);
+//        img.setId(fileid);
         img.setUrl(uploadName);
 
         //sftp.add
-        ChannelSftp sftp = SftpBaseUtil.getConnectIP(new RequestFinishListener() {
-            @Override
-            public void log(java.lang.String response) {
-//                LogBaseUtil.saveLog(SUCCESS);
-            }
-
-            @Override
-            public void error(Exception ex) {
-
-            }
-        });
+        ChannelSftp sftp = SftpBaseUtil.getConnectIP();
         if(SftpBaseUtil.upload(((JSONObject)settingObj.get("server")).getString("path"), uploadFilename, uploadName, sftp)){
             ;
             //listener

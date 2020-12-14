@@ -1,1 +1,1 @@
-{"imgs":[],"map":{},"server":{"host":"192.168.26.128","password":"jxda7797797","path":"/home/jola/wallpaper","port":"22","username":"jol"}}
+{"SERVER":{"HOST":"192.168.26.1","HTTP_ROOT":"/home/jola/projectPath","PASSWORD":"jxda7797797","PORT":"22","USERNAME":"jola"},"USERS":[{"name":"哈哈哈","url":"abc"}],"USER_ROOT":"","defaultImgurl":"img2.jpg","nameBase":"img","nimap":{"哈哈哈":"img3.jpg"}}

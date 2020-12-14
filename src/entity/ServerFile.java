@@ -9,13 +9,13 @@ public class ServerFile {
      * Server的映射表文件
      */
 
-    private Map<User, String> map = null;
+    private Map<String, String> uimap = null;
 
-    public Map<User, String> getMap() {
-        return map;
+    public Map<String, String> getUimap() {
+        return uimap;
     }
 
-    public void setMap(Map<User, String> map) {
-        this.map = map;
+    public void setUimap(Map<String, String> uimap) {
+        this.uimap = uimap;
     }
 }

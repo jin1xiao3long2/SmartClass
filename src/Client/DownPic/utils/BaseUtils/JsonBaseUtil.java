@@ -1,7 +1,9 @@
 package Client.DownPic.utils.BaseUtils;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 //import com.sun.tools.javac.util.List;
 import net.sf.json.JSONArray;
@@ -94,6 +96,22 @@ public class JsonBaseUtil {
             }
         }
     }
+
+//    public static Map<String, String> parseJSON2Map(JSONArray json) {
+//        Map<String, String> tables = new HashMap<String, String>();
+//        Map<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+//        if(json.size() == 1){
+//            tables.put(json.op)
+//            return
+//        }
+//        for(Object key: json.keySet()) {
+//            JSONObject value = json.getJSONObject(key.toString());
+//            String table = (String)JSONObject.toBean(value, String.class, classMap);
+//            tables.put(key.toString(), table);
+//        }
+//
+//        return tables;
+//    }
 
 
 

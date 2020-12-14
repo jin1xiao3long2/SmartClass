@@ -6,15 +6,15 @@ public class ServerImg {
      * id唯一匹配信息
      * filename作为搜索信息
      */
-    private int id;
+    private byte[] data;
     private String url;
 
-    public int getId() {
-        return id;
+    public byte[] getData() {
+        return data;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public String getUrl() {

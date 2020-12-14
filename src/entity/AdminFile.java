@@ -16,8 +16,17 @@ public class AdminFile {
     private Server SERVER = null;
     private String USER_ROOT = null;
     private List<User> USERS = null;
-    private Map<User, String> map = null;
+    private Map<String, String> nimap = null;// name to imgName
     private String nameBase = null;
+    private String defaultImgurl = null;
+
+    public String getDefaultImgurl() {
+        return defaultImgurl;
+    }
+
+    public void setDefaultImgurl(String defaultImgurl) {
+        this.defaultImgurl = defaultImgurl;
+    }
 
     public String getNameBase() {
         return nameBase;
@@ -51,11 +60,12 @@ public class AdminFile {
         this.USERS = USERS;
     }
 
-    public Map<User, String> getMap() {
-        return map;
+    public Map<String, String> getNimap() {
+        return nimap;
     }
 
-    public void setMap(Map<User, String> map) {
-        this.map = map;
+    public void setNimap(Map<String, String> nimap) {
+        this.nimap = nimap;
     }
+
 }
