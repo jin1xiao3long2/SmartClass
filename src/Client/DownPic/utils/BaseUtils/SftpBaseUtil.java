@@ -24,10 +24,10 @@ public class SftpBaseUtil {
 
     public static ChannelSftp getConnectIP(RequestFinishListener listener) {
         int port = 0;
-        String REMOTE_PORT = server.Port;
-        String REMOTE_HOST = server.Host;
-        String USERNAME = server.Username;
-        String PASSWORD = server.Password;
+        String REMOTE_PORT = server.PORT;
+        String REMOTE_HOST = server.HOST;
+        String USERNAME = server.USERNAME;
+        String PASSWORD = server.PASSWORD;
         if (!("".equals(REMOTE_PORT)) && REMOTE_PORT != null) {
             port = Integer.parseInt(REMOTE_PORT);
         }
@@ -144,14 +144,16 @@ public class SftpBaseUtil {
         }
     }
 
-    public static boolean delete(String directory, String deleteFile, ChannelSftp sftp){
+    public static boolean delete(String directory, String deleteFile, ChannelSftp sftp, RequestFinishListener listener){
         boolean success = false;
         try {
             sftp.cd(directory);
             sftp.rm(deleteFile);
+            listener.log(deleteFile);
             success = true;
         }catch (Exception e){
             e.printStackTrace();
+            listener.error(e);
             return success;
         }
         return success;
@@ -159,15 +161,15 @@ public class SftpBaseUtil {
 
 
     public static void setServerData(Server server){
-        setServerData(server.Host, server.Port, server.Username, server.Password, server.url);
+        setServerData(server.HOST, server.PORT, server.USERNAME, server.PASSWORD, server.HTTP_ROOT);
     }
 
     public static void setServerData(String remote_host, String remote_port, String username, String password, String path){
-        server.setHost(remote_host);
-        server.setPort(remote_port);
-        server.setUsername(username);
-        server.setPassword(password);
-        server.setUrl(path);
+        server.setHOST(remote_host);
+        server.setPORT(remote_port);
+        server.setUSERNAME(username);
+        server.setPASSWORD(password);
+        server.setHTTP_ROOT(path);
     }
 
 

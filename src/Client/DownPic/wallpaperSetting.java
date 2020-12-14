@@ -2,12 +2,12 @@ package Client.DownPic;
 
 import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
-import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import Client.DownPic.utils.BaseUtils.SftpBaseUtil;
 import Client.DownPic.utils.JsonFileUtil;
 import Client.ui.Change.change;
 import com.jcraft.jsch.ChannelSftp;
 import entity.*;
+import entity.ServerImg;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -17,10 +17,10 @@ import java.util.regex.Pattern;
 
 public class wallpaperSetting {
 
-    private String projectPath = new String();
-    private String imgsPath = new String();
+    private java.lang.String projectPath = new java.lang.String();
+    private java.lang.String imgsPath = new java.lang.String();
     private ServerFile writeFile = new ServerFile();
-    private final String nameBase = "xxx";
+    private final java.lang.String nameBase = "xxx";
     private AdminFile mainUser = new AdminFile();
 
     public void init(entity.Server server, AdminFile mainUser) {
@@ -28,17 +28,17 @@ public class wallpaperSetting {
 //        projectPath = mainUser.getFilepath();
         this.mainUser = mainUser;
         //create dirs
-        String wallpaperDir = projectPath + "\\wallpaper";
+        java.lang.String wallpaperDir = projectPath + "\\wallpaper";
         File wallpaperDirFile = new File(wallpaperDir);
         if(!wallpaperDirFile.exists())
             wallpaperDirFile.mkdir();
-        String imgsDir = wallpaperDir + "\\imgs";
+        java.lang.String imgsDir = wallpaperDir + "\\imgs";
         imgsPath = imgsDir;
         File imgsDirFile = new File(imgsDir);
         if(!imgsDirFile.exists())
             imgsDirFile.mkdir();
 //        create file
-        String settingsFilename = wallpaperDir + "\\settings.json";
+        java.lang.String settingsFilename = wallpaperDir + "\\settings.json";
         File settingsFile = new File(settingsFilename);
         if(!settingsFile.exists()){
             try{
@@ -67,7 +67,7 @@ public class wallpaperSetting {
      * @param url  路径
      * @return
      */
-    public boolean uploadPic(String uploadFilename) {
+    public boolean uploadPic(java.lang.String uploadFilename) {
         //get info buffer
         //get fileList
 //        String settingFilePath = mainUser.getFilepath() + "\\wallpaper";
@@ -75,10 +75,10 @@ public class wallpaperSetting {
         JSONObject settingObj = JSONObject.fromObject(JsonFileUtil.getJsonInfo(projectPath + "\\wallpaper"));
         JSONArray imgs = settingObj.getJSONArray("imgs");
         int length = imgs.size();
-        List<String> fileList = new ArrayList<>();
+        List<java.lang.String> fileList = new ArrayList<>();
         for(int i = 0; i < length; i++){
             JSONObject obj = imgs.getJSONObject(i);
-            String filename = obj.getString("filename");
+            java.lang.String filename = obj.getString("filename");
             if(filename != null)
                 fileList.add(filename);
         }
@@ -86,11 +86,11 @@ public class wallpaperSetting {
 
         //check backwords
         int index = uploadFilename.indexOf('.');
-        String backwords = uploadFilename.substring(index, uploadFilename.length());
+        java.lang.String backwords = uploadFilename.substring(index, uploadFilename.length());
 
         //checkname
         int fileid =  checkName(fileList);
-        String uploadName = nameBase + fileid + backwords;
+        java.lang.String uploadName = nameBase + fileid + backwords;
         ServerImg img = new ServerImg();
         img.setId(fileid);
         img.setUrl(uploadName);
@@ -98,7 +98,7 @@ public class wallpaperSetting {
         //sftp.add
         ChannelSftp sftp = SftpBaseUtil.getConnectIP(new RequestFinishListener() {
             @Override
-            public void log(String response) {
+            public void log(java.lang.String response) {
 //                LogBaseUtil.saveLog(SUCCESS);
             }
 
@@ -148,7 +148,7 @@ public class wallpaperSetting {
      */
     public boolean changePic(User user, int id) {
 //        String img = imgPath + "\\" + id + ".jpg";
-        String img = null;
+        java.lang.String img = null;
         change.change(img);
         return true;
     }

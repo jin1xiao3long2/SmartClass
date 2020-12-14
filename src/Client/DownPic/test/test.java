@@ -1,10 +1,9 @@
 package Client.DownPic.test;
 
 import Client.DownPic.utils.BaseUtils.FileBaseUtil;
-import Client.DownPic.utils.BaseUtils.LogBaseUtil;
-import Client.DownPic.wallpaperSetting;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
 import entity.*;
+import entity.ServerImg;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.*;
 
 public class test {
 
@@ -28,8 +28,8 @@ public class test {
             ServerFile file = new ServerFile();
 //            file.addImg(img);
 //            file.addImg(img2);
-            String str1 = JsonBaseUtil.ObjtoSting(img);
-            String str2 = JsonBaseUtil.ObjtoSting(file);
+            java.lang.String str1 = JsonBaseUtil.ObjtoSting(img);
+            java.lang.String str2 = JsonBaseUtil.ObjtoSting(file);
             System.out.println(str1);
             System.out.println(str2);
             JSONObject obj1 = JSONObject.fromObject(img);
@@ -58,11 +58,11 @@ public class test {
     @Test
     public void test4(){
         entity.Server server = new Server();
-        server.setHost("192.168.26.128"); //改
-        server.setPort("22");
-        server.setUsername("jol");
-        server.setPassword("jxda7797797");
-        server.setUrl("/home/jola/wallpaper");
+        server.setHOST("192.168.26.128"); //改
+        server.setPORT("22");
+        server.setUSERNAME("jol");
+        server.setPASSWORD("jxda7797797");
+        server.setHTTP_ROOT("/home/jola/wallpaper");
         AdminFile mainUser = new AdminFile();
 //        mainUser.setFilepath("D:\\JAVAProjects\\SmartClass");
 //        wallpaperSetting MainSetting = new wallpaperSetting();
@@ -73,17 +73,15 @@ public class test {
 
     @Test
     public void test5(){
-        FileBaseUtil.writeFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
-        FileBaseUtil.appendFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
-        FileBaseUtil.appendlnFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
-        FileBaseUtil.appendFile("D:\\JAVAProjects\\SmartClass\\123.txt", "123");
+        File file = new File("D:\\JAVAProjects\\settings.json");
+        System.out.println(file.getName());
     }
 
     class Foo{
-        public String key;
-        public String name;
+        public java.lang.String key;
+        public java.lang.String name;
 
-        public Foo(String key, String name) {
+        public Foo(java.lang.String key, java.lang.String name) {
             this.key = key;
             this.name = name;
         }
@@ -91,19 +89,19 @@ public class test {
         public Foo() {
         }
 
-        public String getKey() {
+        public java.lang.String getKey() {
             return key;
         }
 
-        public void setKey(String key) {
+        public void setKey(java.lang.String key) {
             this.key = key;
         }
 
-        public String getName() {
+        public java.lang.String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(java.lang.String name) {
             this.name = name;
         }
 
@@ -147,15 +145,15 @@ public class test {
     @Test
     public void test7(){
         Server server = new Server("host","port","username","password","filepath");
-        String URL_ROOT = "URL_ROOT";
+        java.lang.String URL_ROOT = "URL_ROOT";
         AdminFile adminFile = new AdminFile();
         adminFile = new AdminFile();
         adminFile.setSERVER(server);
         List<User> users = new ArrayList<>();
         adminFile.setUSERS(users);
-        Map<User, ServerImg> map = new HashMap<>();
-        adminFile.setMaps(map);
-        adminFile.setURL_ROOT(URL_ROOT);
+        Map<User, String> map = new HashMap<>();
+        adminFile.setMap(map);
+        adminFile.setUSER_ROOT(URL_ROOT);
         JSONObject obj = JSONObject.fromObject(adminFile);
         System.out.println(obj);
 
@@ -166,7 +164,7 @@ public class test {
         System.out.println(obj);
 
         AdminFile newfile = (AdminFile) JSONObject.toBean(obj, AdminFile.class);
-        System.out.println(newfile.getURL_ROOT());
+        System.out.println(newfile.getUSER_ROOT());
     }
 
 }

@@ -2,15 +2,15 @@ package entity;
 
 public class Admin {
 
-    private AdminFile file = null;
+    private AdminFile adminFile = null;
     private String projectPath = null;
 
-    public AdminFile getFile() {
-        return file;
+    public AdminFile getAdminFile() {
+        return adminFile;
     }
 
-    public void setFile(AdminFile file) {
-        this.file = file;
+    public void setAdminFile(AdminFile adminFile) {
+        this.adminFile = adminFile;
     }
 
     public String getProjectPath() {

@@ -1,60 +1,60 @@
 package entity;
 
 public class Server {
-    public String Host = null;
-    public String Port = null;
-    public String Username = null;
-    public String Password = null;
-    public String url = null;
+    public String HOST = null;
+    public String PORT = null;
+    public String USERNAME = null;
+    public String PASSWORD = null;
+    public String HTTP_ROOT = null;
 
-    public String getUrl() {
-        return url;
+    public String getHTTP_ROOT() {
+        return HTTP_ROOT;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setHTTP_ROOT(String HTTP_ROOT) {
+        this.HTTP_ROOT = HTTP_ROOT;
     }
 
-    public String getHost() {
-        return Host;
+    public String getHOST() {
+        return HOST;
     }
 
-    public void setHost(String host) {
-        Host = host;
+    public void setHOST(String HOST) {
+        this.HOST = HOST;
     }
 
-    public String getPort() {
-        return Port;
+    public String getPORT() {
+        return PORT;
     }
 
-    public void setPort(String port) {
-        Port = port;
+    public void setPORT(String PORT) {
+        this.PORT = PORT;
     }
 
-    public String getUsername() {
-        return Username;
+    public String getUSERNAME() {
+        return USERNAME;
     }
 
-    public void setUsername(String username) {
-        Username = username;
+    public void setUSERNAME(String USERNAME) {
+        this.USERNAME = USERNAME;
     }
 
-    public String getPassword() {
-        return Password;
+    public String getPASSWORD() {
+        return PASSWORD;
     }
 
     public Server(String host, String port, String username, String password, String path) {
-        Host = host;
-        Port = port;
-        Username = username;
-        Password = password;
-        this.url = path;
+        HOST = host;
+        PORT = port;
+        USERNAME = username;
+        PASSWORD = password;
+        this.HTTP_ROOT = path;
     }
 
     public Server() {
     }
 
-    public void setPassword(String password) {
-        Password = password;
+    public void setPASSWORD(String PASSWORD) {
+        this.PASSWORD = PASSWORD;
     }
 }

@@ -13,7 +13,7 @@ public class FileBaseUtil {
      * @return str --json所有信息
      */
 
-    public static String ReadFile(String path) {
+    public static String readFile(String path) {
         File file = new File(path);
         BufferedReader reader = null;
         String laststr = "";
@@ -77,6 +77,30 @@ public class FileBaseUtil {
      */
     public static boolean appendlnFile(String filepath, String text) {
         return writeFileBase(filepath, text, true, true);
+    }
+
+    public static String createFile(String filePath){
+        File file = new File(filePath);
+        if(!file.exists()) {
+            try{
+                file.createNewFile();
+                return filePath;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public static String deleteFile(String filePath){
+        File file = new File(filePath);
+        if(file.exists()){
+            file.delete();
+            return filePath;
+        }else{
+            return null;
+        }
     }
 
     /**

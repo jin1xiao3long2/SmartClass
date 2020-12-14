@@ -10,7 +10,7 @@ public class JsonFileUtil {
      * @return
      */
     public static String getJsonInfo(String path){
-        return FileBaseUtil.ReadFile(path + "\\settings.json");
+        return FileBaseUtil.readFile(path + "\\settings.json");
     }
 
     /**
