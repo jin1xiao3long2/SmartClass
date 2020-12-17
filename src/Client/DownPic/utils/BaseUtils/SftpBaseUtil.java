@@ -37,15 +37,15 @@ public class SftpBaseUtil {
             JSch jsch = new JSch();
 //            jsch.getSession(USERNAME, REMOTE_HOST, port);
             session = jsch.getSession(USERNAME, REMOTE_HOST, port);
-            System.out.println("Session created");
+            System.out.println("Session created sucess");
             session.setPassword(PASSWORD);
             Properties sshConfig = new Properties();
             sshConfig.put("StrictHostKeyChecking", "no");
             session.setConfig(sshConfig);
             session.setTimeout(60000);//
             session.connect();
-            System.out.println("session connected");
-            System.out.println("opening channel");
+            System.out.println("session connected success");
+            System.out.println("opening channel sucess");
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;

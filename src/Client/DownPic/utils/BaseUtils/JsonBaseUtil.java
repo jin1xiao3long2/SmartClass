@@ -23,10 +23,7 @@ public class JsonBaseUtil {
 
     public static JSONArray JsonSearch(String path, String name, String keyWord){
         JSONArray jsonArray = null;
-        System.out.println("path is: " + path);
-        System.out.println("name is: " + name);
         String filename = path + "\\" + name + ".json";
-        System.out.println("filename is: " + filename);
         try{
             File file = new File(filename);
             if(!file.exists()){

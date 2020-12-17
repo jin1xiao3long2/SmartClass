@@ -3,6 +3,7 @@ package Client.DownPic.test;
 import Client.Admin.AdminwallpaperSetting;
 import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.FileBaseUtil;
+import Client.DownPic.utils.BaseUtils.ImgBaseUtil;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
 import entity.*;
 import entity.ServerImg;
@@ -10,10 +11,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
 import java.io.*;
 
 public class test {
@@ -75,8 +75,25 @@ public class test {
 
     @Test
     public void test5(){
-        File file = new File("D:\\JAVAProjects\\settings.json");
-        System.out.println(file.getName());
+        Map<String, String> map = new HashMap<>();
+        map.put("abc", "cba");
+        JSONObject obj1 = JSONObject.fromObject(map);
+        System.out.println(obj1);
+        map.put("aaa", "ccc");
+        obj1 = JSONObject.fromObject(map);
+        System.out.println(obj1);
+
+        Iterator iter = map.values().iterator();
+        String de = "ccc";
+        while(iter.hasNext()){
+            String info = (String) iter.next();
+            if(info.equals(de))
+                info = "aa";
+        }
+        obj1 = JSONObject.fromObject(map);
+        System.out.println(obj1);
+
+
     }
 
     class Foo{
@@ -172,7 +189,7 @@ public class test {
 
 //        修改server
         Server server = setServer("192.168.26.1","22", "jola", "jxda7797797", "/home/jola/projectPath");
-        mainApp.setServer(server);
+//        mainApp.setServer(server);
         System.out.println(JsonBaseUtil.ObjtoSting(mainApp.getServer()));
     }
 
@@ -184,5 +201,30 @@ public class test {
         server.setPASSWORD(password);
         server.setHTTP_ROOT(http_root);
         return server;
+    }
+
+    @Test
+    public void test8(){
+        byte[] data = FileBaseUtil.getBytesByFile("D:\\JAVAProjects\\SmartClass\\1.jpg");
+        Image img = null;
+        try{
+             img = ImgBaseUtil.GetImageByByte(data);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        // 创建及设置窗口
+        JFrame frame = new JFrame("HelloWorldSwing");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // 添加 "Hello World" 标签
+        JLabel label = new JLabel("Hello World");
+        frame.getContentPane().add(label);
+
+        // 显示窗口
+        frame.pack();
+        frame.setVisible(true);
+
     }
 }
