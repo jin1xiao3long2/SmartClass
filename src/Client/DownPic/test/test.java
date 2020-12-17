@@ -1,6 +1,6 @@
 package Client.DownPic.test;
 
-import Client.Admin.AdminwallpaperSetting;
+//import Client.Admin.AdminwallpaperSetting;
 import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.FileBaseUtil;
 import Client.DownPic.utils.BaseUtils.ImgBaseUtil;
@@ -10,6 +10,8 @@ import entity.ServerImg;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -168,20 +170,20 @@ public class test {
         AdminFile adminFile = new AdminFile();
         admin.setProjectPath(projectPath);
         admin.setAdminFile(adminFile);
-        AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
+//        AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
 
         try{
-            mainApp.init(admin, new RequestFinishListener() {
-                @Override
-                public void log(String response) {
-                    System.out.println(response);
-                }
-
-                @Override
-                public void error(Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
+//            mainApp.init(admin, new RequestFinishListener() {
+//                @Override
+//                public void log(String response) {
+//                    System.out.println(response);
+//                }
+//
+//                @Override
+//                public void error(Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            });
         }catch (Exception e){
 //
             e.printStackTrace();
@@ -190,7 +192,7 @@ public class test {
 //        修改server
         Server server = setServer("192.168.26.1","22", "jola", "jxda7797797", "/home/jola/projectPath");
 //        mainApp.setServer(server);
-        System.out.println(JsonBaseUtil.ObjtoSting(mainApp.getServer()));
+//        System.out.println(JsonBaseUtil.ObjtoSting(mainApp.getServer()));
     }
 
     private static Server setServer(String host, String port, String username, String password, String http_root){
@@ -205,10 +207,10 @@ public class test {
 
     @Test
     public void test8(){
-        byte[] data = FileBaseUtil.getBytesByFile("D:\\JAVAProjects\\SmartClass\\1.jpg");
+//        byte[] data = FileBaseUtil.getBytesByFile("D:\\JAVAProjects\\SmartClass\\1.jpg");
         Image img = null;
         try{
-             img = ImgBaseUtil.GetImageByByte(data);
+//             img = ImgBaseUtil.GetImageByByte(data);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -226,5 +228,12 @@ public class test {
         frame.pack();
         frame.setVisible(true);
 
+    }
+
+    @Test
+    public void test10(){
+        List<String> ls = new ArrayList<>();
+        ls.add("abc");
+        System.out.println(ls);
     }
 }

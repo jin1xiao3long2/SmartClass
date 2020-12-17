@@ -21,7 +21,7 @@ public class ImgBaseUtil {
         try{
             boolean result = ImageIO.write(bu, "jpg", bos);
         }catch (Exception e){
-            throw e;
+            throw new Exception("类型转换失败");
         }
         byte[] data = bos.toByteArray();
         return data;

@@ -63,61 +63,48 @@ public class test {
         System.out.println("x="+f.getX()+" y="+f.getY());//获取窗体的坐标
     }
 
+    public static class Rec extends JPanel{
+        private int x;
+        private int y;
+        private int w;
+        private int h;
+
+        public Rec(int x, int y, int w, int h){
+            super();
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.BLUE);
+            g.fillRect(x,y,w,h);
+        }
+    }
+
     public static void main(String[] args){
-        JFrame jFrame = new JFrame("hello");
+        JFrame jFrame = new JFrame();
         JPanel jPanel = new JPanel();
-        JButton addNewUserButton = new JButton("");
-        addNewUserButton.setText("增加用户");
-        addNewUserButton.setBounds(400,74,60,20);
-        addNewUserButton.setMargin(new Insets(0,0,0,0));
-        JButton delUserButton = new JButton("");
-        delUserButton.setText("删除用户");
-        delUserButton.setBounds(200,74,60,20);
-        delUserButton.setMargin(new Insets(0,0,0,0));
-        delUserButton.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                jFrame.getContentPane().removeAll();
-                jPanel.removeAll();
-                jPanel.add(addNewUserButton);
-                jFrame.getContentPane().add(new JScrollPane(jPanel));
-                jFrame.invalidate();
-                jFrame.validate();
-                jFrame.repaint();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-        jFrame.setPreferredSize(new Dimension(800,600));
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jPanel.setLayout(null);
-        jPanel.add(addNewUserButton);
-        jPanel.add(delUserButton);
-        jPanel.setPreferredSize(new Dimension(600,400));
-        JScrollPane jScrollPane = new JScrollPane(jPanel);
-        jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jFrame.getContentPane().add(jScrollPane);
+        jPanel.setPreferredSize(new Dimension(700, 500));
+        Rec rec = new Rec(30,40,50,60);
+        rec.setLayout(null);
+        rec.setFocusable(true);
+
+        JButton text = new JButton();
+        text.setText("haha");
+        text.setBounds(337, 60, 50, 30);
+        text.setMargin(new Insets(0, 0, 0, 0));
+        jPanel.add(text);
+
+        jFrame.setPreferredSize(new Dimension(800, 600));
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jFrame.getContentPane().add(rec);
+        jFrame.getContentPane().add(jPanel);
         jFrame.pack();
         jFrame.setVisible(true);
-
     }
 }

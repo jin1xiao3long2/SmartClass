@@ -253,6 +253,16 @@ public class MainWindow extends JFrame{
 		mainApp.setDefaultImg(imgName);
 	}
 
+	public boolean has_defaultImg(){
+		return mainApp.has_defaultImg();
+	}
 
+	public List<ServerImg> getImgs(){
+		return mainApp.getImgs();
+	}
+
+	public void setDefaultImg(String url){
+		mainApp.setDefaultImg(url);
+	}
 
 }	

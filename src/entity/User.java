@@ -21,3 +21,11 @@ public class User {
         this.name = name;
     }
 }
+
+
+//serverFile 教室url -> imgname
+//localFile users(教室url -> 教室name), (教室name->imgname)
+//教室name->byte[]
+
+//(教室name->imgname) ->  (教室name->img)
+//(imgname) -> (imagename->image)

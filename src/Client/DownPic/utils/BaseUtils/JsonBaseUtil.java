@@ -21,7 +21,7 @@ public class JsonBaseUtil {
      *          str --搜索的jsonArray
      */
 
-    public static JSONArray JsonSearch(String path, String name, String keyWord){
+    public static JSONArray JsonSearch(String path, String name, String keyWord) throws Exception{
         JSONArray jsonArray = null;
         String filename = path + "\\" + name + ".json";
         try{
@@ -30,15 +30,12 @@ public class JsonBaseUtil {
                 file.createNewFile();
             }
             String str = FileUtils.readFileToString(file,"UTF-8");
-            System.out.println(str);
             JSONObject jsonObject = JSONObject.fromObject(str);
-            System.out.println("jsonObject is: " + jsonObject);
             if(jsonObject != null){
                 jsonArray = jsonObject.getJSONArray(keyWord);
             }
-            System.out.println("jsonArray is: " + jsonArray);
         }catch (IOException e){
-            e.printStackTrace();
+            throw new Exception("");
         }
         return jsonArray;
     }
@@ -49,15 +46,17 @@ public class JsonBaseUtil {
      * @param object
      * @return
      */
-    public static String ObjtoSting(Object object) {
+    public static String ObjtoSting(Object object)throws Exception {
         if(object == null)
             return null;
         String str = null;
         try {
             JSONArray jsonArray = JSONArray.fromObject(object);
             str = jsonArray.toString();
+//            class
+//            private int data;
         }catch (Exception e){
-            e.printStackTrace();
+            throw new Exception("类型转换失败");
         }
         return str.substring(1, str.length()-1);
     }

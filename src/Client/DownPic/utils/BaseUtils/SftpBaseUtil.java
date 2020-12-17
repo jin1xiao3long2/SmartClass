@@ -23,7 +23,7 @@ public class SftpBaseUtil {
     private static final int Ex = 0;
 
 
-    public static ChannelSftp getConnectIP() {
+    public static ChannelSftp getConnectIP()throws Exception{
         int port = 0;
         String REMOTE_PORT = server.PORT;
         String REMOTE_HOST = server.HOST;
@@ -37,22 +37,21 @@ public class SftpBaseUtil {
             JSch jsch = new JSch();
 //            jsch.getSession(USERNAME, REMOTE_HOST, port);
             session = jsch.getSession(USERNAME, REMOTE_HOST, port);
-            System.out.println("Session created sucess");
+            System.out.println("正在连接服务器...");
             session.setPassword(PASSWORD);
             Properties sshConfig = new Properties();
             sshConfig.put("StrictHostKeyChecking", "no");
             session.setConfig(sshConfig);
             session.setTimeout(60000);//
             session.connect();
-            System.out.println("session connected success");
-            System.out.println("opening channel sucess");
+            System.out.println("连接成功");
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
 //            listener.log(USERNAME);
 //            LogBaseUtil.saveLog(Log, "连接服务器 :" + USERNAME + " 成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("服务器连接失败");
 //            listener.error(e);
 //            LogBaseUtil.saveLog(Log, "连接服务器失败, 异常信息请查看error文件");
 //            LogBaseUtil.saveLog(Ex, "连接服务器 :" + USERNAME + " 异常:" + e.toString());
@@ -70,21 +69,16 @@ public class SftpBaseUtil {
      * @return true --上传成功
      * false --上传失败
      */
-    public static boolean upload(String directory, String uploadFileName, String saveFileName, ChannelSftp sftp) {
-        boolean success = false;
+    public static void upload(String directory, String uploadFileName, String saveFileName, ChannelSftp sftp) throws Exception {
         File file = new File(uploadFileName);
-
         try {
             FileInputStream fis = new FileInputStream(file);
             sftp.cd(directory);
             sftp.put(fis, saveFileName);
-            success = true;
             fis.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            return success;
+            throw new Exception("上传文件失败");
         }
-        return success;
     }
 
     /**
@@ -97,20 +91,17 @@ public class SftpBaseUtil {
      * @return true --下载成功
      * false --下载失败
      */
-    public static boolean download(String directory, String downloadFile, String saveFile, ChannelSftp sftp) {
-        boolean success = false;
+    public static void download(String directory, String downloadFile, String saveFile, ChannelSftp sftp) throws Exception {
         try {
             sftp.cd(directory);
             File file = new File(downloadFile);
             sftp.get(saveFile, new FileOutputStream(file));
-            success = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("下载文件失败");
         }
-        return success;
     }
 
-    public static byte[] downloadBybyte(String directory, String downloadFile, String saveFile, ChannelSftp sftp) throws SftpException, IOException {
+    public static byte[] downloadBybyte(String directory, String downloadFile, String saveFile, ChannelSftp sftp) throws Exception {
         if (directory != null && !"".equals(directory)) {
             sftp.cd(directory);
         }
@@ -134,7 +125,6 @@ public class SftpBaseUtil {
             while (iter.hasNext()) {
                 ChannelSftp.LsEntry eFile = (ChannelSftp.LsEntry) iter.next();
                 String filename = eFile.getFilename();
-                System.out.println(filename);
                 fileList.add(filename);
             }
         } catch (Exception e) {
@@ -149,23 +139,19 @@ public class SftpBaseUtil {
         if (sftp.isConnected()) {
             session.disconnect();
             sftp.disconnect();
-            LogBaseUtil.saveLog(Log, "断开连接成功");
         }
     }
 
-    public static boolean delete(String directory, String deleteFile, ChannelSftp sftp) {
-        boolean success = false;
+    public static void delete(String directory, String deleteFile, ChannelSftp sftp) throws Exception {
         try {
             sftp.cd(directory);
             sftp.rm(deleteFile);
 //            listener.log(deleteFile);
-            success = true;
         } catch (Exception e) {
             e.printStackTrace();
 //            listener.error(e);
-            return success;
+            throw new Exception("删除服务器文件失败");
         }
-        return success;
     }
 
 

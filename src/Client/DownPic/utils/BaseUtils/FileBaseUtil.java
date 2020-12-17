@@ -13,10 +13,10 @@ public class FileBaseUtil {
      * @return str --json所有信息
      */
 
-    public static String readFile(String path) {
+    public static String readFile(String path) throws Exception {
         File file = new File(path);
         BufferedReader reader = null;
-        String laststr = "";
+        String fileText = "";
         try {
             // System.out.println("以行为单位读取文件内容，一次读一整行：");
             reader = new BufferedReader(new FileReader(file));
@@ -26,12 +26,12 @@ public class FileBaseUtil {
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
 //                System.out.println("line " + line + ": " + tempString);
-                laststr = laststr + tempString;
+                fileText = fileText + tempString;
                 line++;
             }
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new Exception("读取文件" + file + "失败");
         } finally {
             if (reader != null) {
                 try {
@@ -40,60 +40,73 @@ public class FileBaseUtil {
                 }
             }
         }
-        return laststr;
+        return fileText;
     }
 
     /**
-     * 字符串写入文件
+     * 文件写入字符串
      *
      * @param filePath 路径名
      * @param text     写入的信息
-     * @return true  --成功
-     * flase --失败
+     * @return
+     * @throws Exception 抛出写入文件信息错误异常
      */
-    public static boolean writeFile(String filePath, String text) {
-        return writeFileBase(filePath, text, false, false);
+    public static void writeFile(String filePath, String text) throws Exception {
+        try {
+            writeFileBase(filePath, text, false, false);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     /**
-     * 字符串追加文件
+     * 文件追加字符串
      *
      * @param filePath 路径名
      * @param text     写入的信息
-     * @return true  --成功
-     * flase --失败
+     * @return
+     * @throws Exception 抛出写入文件信息错误异常
      */
-    public static boolean appendFile(String filepath, String text) {
-        return writeFileBase(filepath, text, true, false);
+    public static void appendFile(String filepath, String text) throws Exception {
+        try {
+            writeFileBase(filepath, text, true, false);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     /**
-     * 字符串写入文件并换行
+     * 文件追加字符串并换行
      *
      * @param filePath 路径名
      * @param text     写入的信息
-     * @return true  --成功
-     * flase --失败
+     * @return
+     * @throws Exception 抛出写入文件信息错误异常
      */
-    public static boolean appendlnFile(String filepath, String text) {
-        return writeFileBase(filepath, text, true, true);
+    public static void appendlnFile(String filepath, String text) throws Exception {
+
+        try {
+            writeFileBase(filepath, text, true, true);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
-    public static String createFile(String filePath){
+    public static String createFile(String filePath) throws Exception {
         File file = new File(filePath);
-        if(!file.exists()) {
-            try{
+        if (!file.exists()) {
+            try {
                 file.createNewFile();
                 return filePath;
-            }catch (Exception e){
-                e.printStackTrace();
-                return null;
+            } catch (Exception e) {
+                throw new Exception("创建文件错误");
             }
+        } else {
+            throw new Exception(filePath + "文件已存在,请检查文件并进行删除");
         }
-        return null;
     }
 
-    public static byte[] getBytesByFile(String pathStr) {
+    public static byte[] getBytesByFile(String pathStr) throws Exception {
         File file = new File(pathStr);
         try {
             FileInputStream fis = new FileInputStream(file);
@@ -108,19 +121,18 @@ public class FileBaseUtil {
             bos.close();
             return data;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("文件" + pathStr + "读取失败");
         }
-        return null;
     }
 
 
-    public static String deleteFile(String filePath){
+    public static String deleteFile(String filePath) throws Exception {
         File file = new File(filePath);
-        if(file.exists()){
+        if (file.exists()) {
             file.delete();
             return filePath;
-        }else{
-            return null;
+        } else {
+            throw new Exception("该文件不存在");
         }
     }
 
@@ -133,7 +145,7 @@ public class FileBaseUtil {
      * @param is_newline 是否换行
      * @return
      */
-    private static boolean writeFileBase(String filePath, String text, boolean is_append, boolean is_newline) {
+    private static void writeFileBase(String filePath, String text, boolean is_append, boolean is_newline) throws Exception {
         File file = null;
         try {
             file = new File(filePath);
@@ -144,10 +156,9 @@ public class FileBaseUtil {
             out.write(sb.toString().getBytes(StandardCharsets.UTF_8));
             out.flush();
             out.close();
-            return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+//            e.printStackTrace();
+            throw new Exception("写入文件错误");
         }
     }
 
