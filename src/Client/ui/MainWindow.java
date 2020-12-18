@@ -13,10 +13,7 @@ import javax.swing.*;
 
 import Client.Admin.AdminwallpaperSetting;
 import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
-import entity.Server;
-import entity.ServerImg;
-import entity.ShowImg;
-import entity.User;
+import entity.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -26,6 +23,7 @@ public class MainWindow extends JFrame{
 	public AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
 	public JScrollPane scrollpane = null;
 	public JPanel panel = new JPanel();
+	private Admin admin = null;
 
 
 	public void repaint() {
@@ -45,11 +43,12 @@ public class MainWindow extends JFrame{
 		frame.repaint();
 	}
 
-	public void Init(AdminwallpaperSetting mainapp) {
+	public void Init(AdminwallpaperSetting mainapp, Admin admin) {
 		frame.setPreferredSize(new Dimension(566,410));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainApp = mainapp;
-
+		this.admin = admin;
+		mainapp.init(admin);
 		if(mainApp.server_correct()){
 			mainApp.initImgs();
 			try {

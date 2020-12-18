@@ -22,24 +22,8 @@ public class Main {
         admin.setProjectPath(projectPath);
         admin.setAdminFile(adminFile);
         AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
-        try {
-            mainApp.init(admin, new RequestFinishListener() {
-                @Override
-                public void log(String response) {
-                    System.out.println("!23");
-                }
-
-                @Override
-                public void error(Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
         MainWindow window = new MainWindow();
-        window.Init(mainApp);
+        window.Init(mainApp, admin);
 
 
     }
