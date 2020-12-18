@@ -28,7 +28,7 @@ public class LogBaseUtil {
      * @param state 1->log 0->error
      * @param message
      */
-    public static void saveLog(int state, String message)throws Exception{
+    public static void saveLog(int state, String message){
         FileOutputStream out = null;
         try{
             Date date = new Date();
@@ -51,7 +51,7 @@ public class LogBaseUtil {
             String log = "时间:" + time + ", " + message + "\n";
             FileBaseUtil.appendlnFile(saveDir + "\\" + name + ".txt", log);
         }catch (Exception e){
-            throw new Exception("日志保存失败");
+
         }
     }
 }

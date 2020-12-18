@@ -1,6 +1,8 @@
 package Client.ui;
 
+import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.ImgBaseUtil;
+import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import entity.ServerImg;
 
 import java.awt.*;
@@ -25,6 +27,8 @@ public class PicArchiveListener extends JFrame implements ActionListener {
     JFrame frame = new JFrame("");
     Rec panel = new Rec();
     ServerImg selectImg = null;
+    private final int SUCCESS = 1;
+    private final int FAILED = 0;
 
 
     public class Rec extends JPanel {
@@ -61,6 +65,7 @@ public class PicArchiveListener extends JFrame implements ActionListener {
         super.repaint();
         frame.getContentPane().removeAll();
         panel.removeAll();
+        imgs = mainWindow.getImgs();
         panelDraw();
         frame.getContentPane().add(panel);
         frame.invalidate();
@@ -69,7 +74,7 @@ public class PicArchiveListener extends JFrame implements ActionListener {
     }
 
     void panelDraw() {
-        System.out.println("imgs size is " + imgs.size());
+//        System.out.println("imgs size is " + imgs.size());
 
         frame.setPreferredSize(new Dimension(566, 410));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -93,28 +98,34 @@ public class PicArchiveListener extends JFrame implements ActionListener {
                 if (returnval == JFileChooser.APPROVE_OPTION) {
                     File[] arrfiles = chooser.getSelectedFiles();
                     if (arrfiles == null || arrfiles.length == 0) {
-                        System.out.println("length=0 or cannot get file");
+                        MainWindow.showWarning("操作失败");
                         return;
                     }
                     File ff = chooser.getSelectedFile();
                     String fileName = ff.getName();
                     String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);//extends name like jpg/png
                     if (!(prefix.equals("jpg") || prefix.equals("png"))) {
-                        JOptionPane.showMessageDialog(new JDialog(), "仅支持上传jpg与png图片", "警告", JOptionPane.WARNING_MESSAGE);
+                        MainWindow.showWarning("仅支持上传jpg与png图片");
                         return;
                     }
                     String absolutePath = chooser.getSelectedFile().getAbsolutePath();
                     ImageIcon imageicon = new ImageIcon(absolutePath);
                     ServerImg img = new ServerImg();
-                    String url = mainWindow.uploadPic(absolutePath);
-                    img.setUrl(url);
-                    try {
-                        img.setData(ImgBaseUtil.GetByteByImage(imageicon.getImage()));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    imgs.add(img);
-                    JOptionPane.showMessageDialog(new JDialog(), "上传成功");
+                    String url = mainWindow.uploadPic(absolutePath, new RequestFinishListener() {
+                        @Override
+                        public void log(String response) {
+                            MainWindow.showMessage(response);
+                            LogBaseUtil.saveLog(SUCCESS, response);
+                        }
+
+                        @Override
+                        public void error(Exception ex) {
+                            MainWindow.showWarning(ex.getMessage());
+                            LogBaseUtil.saveLog(FAILED, ex.getMessage());
+                        }
+                    });
+
+
                     repaint();
 
                 }
@@ -123,11 +134,9 @@ public class PicArchiveListener extends JFrame implements ActionListener {
 
         panel.add(uploadButton);
 
-        if (imgs == null) {
-            System.out.println("NULL IMGS");
-            return;
-        } else if (imgs.size() == 0) {
-            System.out.println("0 IMG");
+        if (imgs.size() == 0);//显示空白消息
+        if( imgs == null ){
+            MainWindow.showWarning("操作失败,图片信息异常");
             return;
         }
 
@@ -145,19 +154,19 @@ public class PicArchiveListener extends JFrame implements ActionListener {
 
 
                 if (imgs.get(index) == null) {
-
+                    MainWindow.showWarning("操作失败,图片信息异常");
                 } else {
 
                     if (selectImg == imgs.get(index)) {
                         panel.addRec(35 + j * 118, 108 + i * 84, 84, 64);
-                        System.out.println("new rec");
                     }
 
                     Image image = null;
                     try {
                         image = ImgBaseUtil.GetImageByByte(imgs.get(index).getData());
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        MainWindow.showWarning(ex.getMessage());
+                        return ;
                     }
                     ImageIcon img = new ImageIcon(image);
                     img.setImage(img.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
@@ -204,15 +213,22 @@ public class PicArchiveListener extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectImg != null) {
-                    if (mainWindow.has_defaultImg()) {
-                        mainWindow.delPic(selectImg.getUrl());
-                        imgs.remove(selectImg);
-                        JOptionPane.showMessageDialog(null, "删除图片成功","消息提示", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "请设置默认图片再进行修改", "警告", JOptionPane.WARNING_MESSAGE);
-                    }
+                    mainWindow.delPic(selectImg.getUrl(), new RequestFinishListener() {
+                        @Override
+                        public void log(String response) {
+                            MainWindow.showMessage(response);
+                            LogBaseUtil.saveLog(SUCCESS, response);
+                        }
+
+                        @Override
+                        public void error(Exception ex) {
+                            MainWindow.showWarning(ex.getMessage());
+                            LogBaseUtil.saveLog(FAILED, ex.getMessage());
+                        }
+//                        imgs
+                    });
                 } else {
-                    JOptionPane.showMessageDialog(null, "请选择图片", "警告", JOptionPane.WARNING_MESSAGE);
+                    MainWindow.showWarning("请选择图片");
                 }
                 mainWindow.repaint();
                 repaint();
@@ -229,10 +245,21 @@ public class PicArchiveListener extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectImg == null) {
-                    JOptionPane.showMessageDialog(null, "请选择图片", "警告", JOptionPane.WARNING_MESSAGE);
+                    MainWindow.showWarning("请选择一张图片");
                 } else {
-                    mainWindow.setDefaultImg(selectImg.getUrl());
-                    JOptionPane.showMessageDialog(null, "设置成功", "消息提示", JOptionPane.INFORMATION_MESSAGE);
+                    mainWindow.setDefaultImg(selectImg.getUrl(), new RequestFinishListener() {
+                        @Override
+                        public void log(String response) {
+                            MainWindow.showMessage(response);
+                            LogBaseUtil.saveLog(SUCCESS, response);
+                        }
+
+                        @Override
+                        public void error(Exception ex) {
+                            MainWindow.showWarning(ex.getMessage());
+                            LogBaseUtil.saveLog(FAILED, ex.getMessage());
+                        }
+                    });
                 }
                 repaint();
             }

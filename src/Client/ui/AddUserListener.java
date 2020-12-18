@@ -11,7 +11,9 @@ import java.util.List;
 
 import javax.swing.*;
 
+import Client.DownPic.listener.RequestFinishListener;
 import Client.DownPic.utils.BaseUtils.ImgBaseUtil;
+import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import entity.Data;
 import entity.ServerImg;
 import entity.ShowImg;
@@ -22,6 +24,8 @@ public class AddUserListener implements ActionListener {
     private List<ServerImg> imgs = new ArrayList<>();
     private ServerImg selectedImage = null;
     public MainWindow mainWindow;
+    private final int SUCCESS = 1;
+    private final int FAILED = 0;
 
 
     @Override
@@ -32,7 +36,7 @@ public class AddUserListener implements ActionListener {
         JFrame addUserFrame = new JFrame();
         imgs = mainWindow.mainApp.getImgs();
 
-        addUserFrame.setPreferredSize(new Dimension(480,370));
+        addUserFrame.setPreferredSize(new Dimension(480, 370));
 
         addUserFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
@@ -72,24 +76,25 @@ public class AddUserListener implements ActionListener {
             if (imgs.size() != 0) {
                 selectedImage = imgs.get(0);
                 System.out.println("here");
-                if(selectedImage == null){
-                    System.out.println("img is null");
+                if (selectedImage == null) {
+                    return ;
                 }
-            }else{
-                System.out.println("imgs is empty");
+            } else {
+                return ;
             }
         } else {
-            System.out.println("imgs is null");
+            return ;
         }
 
         JLabel selectedPic = new JLabel();
         selectedPic.setBounds(97, 102, 40, 40);
         Image image = null;
 
-        try{
-             image = ImgBaseUtil.GetImageByByte(selectedImage.getData());
-        }catch (Exception ex){
-            ex.printStackTrace();
+        try {
+            image = ImgBaseUtil.GetImageByByte(selectedImage.getData());
+        } catch (Exception ex) {
+            MainWindow.showWarning("操作失败");
+            return ;
         }
         ImageIcon icon = new ImageIcon();
         icon.setImage(image.getScaledInstance(40, 40, Image.SCALE_DEFAULT));
@@ -119,13 +124,15 @@ public class AddUserListener implements ActionListener {
 
 
                         if (imgs.get(index) == null) {
-
+                            MainWindow.showWarning("检测到错误信息");
+                            return ;
                         } else {
                             Image image = null;
-                            try{
+                            try {
                                 image = ImgBaseUtil.GetImageByByte(imgs.get(index).getData());
-                            }catch (Exception e){
-                                e.printStackTrace();
+                            } catch (Exception e) {
+                                MainWindow.showWarning("操作失败");
+                                return ;
                             }
                             ImageIcon img = new ImageIcon(image);//获取图像
                             img.setImage(img.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
@@ -138,10 +145,13 @@ public class AddUserListener implements ActionListener {
                                     addUserFrame.invalidate();
                                     selectedImage = imgs.get(index);
                                     Image image = null;
-                                    try{
+                                    try {
                                         image = ImgBaseUtil.GetImageByByte(selectedImage.getData());
-                                    }catch (Exception ex){
-                                        ex.printStackTrace();
+                                    } catch (Exception ex) {
+                                        MainWindow.showWarning("操作失败");
+                                        addUserFrame.validate();
+                                        addUserFrame.repaint();
+                                        selectPic.dispose();
                                     }
                                     ImageIcon ic = new ImageIcon(image);
                                     ic.setImage(image.getScaledInstance(80, 80, Image.SCALE_DEFAULT));
@@ -209,10 +219,22 @@ public class AddUserListener implements ActionListener {
                 user.setName(userName);
                 user.setUrl(url);
                 ServerImg selectImage = selectedImage;
-                mainWindow.addUser(user, selectImage);
+
+                mainWindow.addUser(user, selectImage, new RequestFinishListener() {
+                    @Override
+                    public void log(String response) {
+                        MainWindow.showMessage(response);
+                        LogBaseUtil.saveLog(SUCCESS, response);
+                    }
+
+                    @Override
+                    public void error(Exception ex) {
+                        MainWindow.showMessage(ex.getMessage());
+                    }
+                });
+
                 addUserFrame.dispose();
                 mainWindow.repaint();
-
             }
         });
         panel.add(Confirm);
@@ -221,14 +243,12 @@ public class AddUserListener implements ActionListener {
         addUserFrame.add(panel);
         addUserFrame.pack();
         addUserFrame.setVisible(true);
-
     }
 
 
     public AddUserListener(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
     }
-
 
 
     public AddUserListener(JFrame frame, MainWindow mainWindow) {

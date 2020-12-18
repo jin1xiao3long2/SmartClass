@@ -43,15 +43,18 @@ public class AdminwallpaperSetting {
 
         configRootPath = admin.getProjectPath();
         adminFile = admin.getAdminFile();
-
-        checkFile(configRootPath);
+        try {
+            checkFile(configRootPath);
 
 
 //      configFilePath include
-        configFilePath = initFile(configRootPath);
+            configFilePath = initFile(configRootPath);
 //            JsonBaseUtil.ObjtoSting(adminFile);
 
-        LogBaseUtil.init(configRootPath);
+            LogBaseUtil.init(configRootPath);
+        }catch (Exception e){
+            throw new Exception(errorInfo + e.getMessage());
+        }
     }
 
 

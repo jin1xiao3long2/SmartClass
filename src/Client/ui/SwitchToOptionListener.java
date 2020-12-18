@@ -6,12 +6,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import Client.DownPic.listener.RequestFinishListener;
+import Client.DownPic.utils.BaseUtils.LogBaseUtil;
 import entity.Data;
 import entity.Server;
 
 public class SwitchToOptionListener implements ActionListener{
 	public String ButtonName;
 	public MainWindow mainWindow;
+	private final int SUCCESS = 1;
+	private final int FAILED = 0;
 
 	public SwitchToOptionListener(String buttonName, MainWindow mainWindow)
 	{
@@ -134,14 +138,20 @@ public class SwitchToOptionListener implements ActionListener{
 				String user_root = UserRoot.getText();
 				String namebase = NameBase.getText();
 				Data data = new Data(server_host,server_port,server_username,server_password,server_http_root,user_root,namebase);
-				System.out.println(server_host);
-				mainWindow.mainApp.setData(data);
-				try{
-					mainWindow.mainApp.initServerFile();
-				}catch (Exception ex){
-					mainWindow.mainApp.setData(originData);
-					ex.printStackTrace();
-				}
+//				System.out.println(server_host);
+
+					mainWindow.setData(data, new RequestFinishListener() {
+						@Override
+						public void log(String response) {
+							LogBaseUtil.saveLog(SUCCESS, response);
+						}
+
+						@Override
+						public void error(Exception ex) {
+							MainWindow.showWarning(ex.getMessage());
+						}
+					});
+
 				frame.dispose();
 				mainWindow.repaint();
 			}
