@@ -60,7 +60,7 @@ public class test {
 
         f.setResizable(false);//设置窗体是否可以改变大小
 
-        System.out.println("x="+f.getX()+" y="+f.getY());//获取窗体的坐标
+//        System.out.println("x="+f.getX()+" y="+f.getY());//获取窗体的坐标
     }
 
     public static class Rec extends JPanel{
@@ -86,25 +86,41 @@ public class test {
     }
 
     public static void main(String[] args){
-        JFrame jFrame = new JFrame();
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(null);
-        jPanel.setPreferredSize(new Dimension(700, 500));
-        Rec rec = new Rec(30,40,50,60);
-        rec.setLayout(null);
-        rec.setFocusable(true);
+//        JFrame jFrame = new JFrame();
+//        JPanel jPanel = new JPanel();
+//        jPanel.setLayout(null);
+//        jPanel.setPreferredSize(new Dimension(700, 500));
+//        Rec rec = new Rec(30,40,50,60);
+//        rec.setLayout(null);
+//        rec.setFocusable(true);
+//
+//        JButton text = new JButton();
+//        text.setText("haha");
+//        text.setBounds(337, 60, 50, 30);
+//        text.setMargin(new Insets(0, 0, 0, 0));
+//        jPanel.add(text);
+//
+//        jFrame.setPreferredSize(new Dimension(800, 600));
+//        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        jFrame.getContentPane().add(rec);
+//        jFrame.getContentPane().add(jPanel);
+//        jFrame.pack();
+//        jFrame.setVisible(true);
+        JOptionPane op = new JOptionPane("正在拉", JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = op.createDialog("321");
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(false);
+        dialog.setVisible(true);
+        System.out.println(321);
+        try {
+            Thread.sleep(1000); //sleep 5 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(123);
+        dialog.setVisible(false);
+        dialog.dispose();
 
-        JButton text = new JButton();
-        text.setText("haha");
-        text.setBounds(337, 60, 50, 30);
-        text.setMargin(new Insets(0, 0, 0, 0));
-        jPanel.add(text);
-
-        jFrame.setPreferredSize(new Dimension(800, 600));
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        jFrame.getContentPane().add(rec);
-        jFrame.getContentPane().add(jPanel);
-        jFrame.pack();
-        jFrame.setVisible(true);
     }
 }

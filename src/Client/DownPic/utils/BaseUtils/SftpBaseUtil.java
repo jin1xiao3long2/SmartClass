@@ -15,7 +15,7 @@ public class SftpBaseUtil {
 
     private static Server server = new Server();
     private static final Server DEFAULT_SERVER = new Server("192,168,88,1", "22", "jola", "jxda7797797", "/home/jola");
-    private static final int SESSION_TIMEOUT = 60000; //session超时时间
+    private static final int SESSION_TIMEOUT = 5000; //session超时时间
     private static final int CHANNEL_TIMEOUT = 5000; //管道流超时时间
     static Session session = null;
 
@@ -42,7 +42,7 @@ public class SftpBaseUtil {
             Properties sshConfig = new Properties();
             sshConfig.put("StrictHostKeyChecking", "no");
             session.setConfig(sshConfig);
-            session.setTimeout(60000);//
+            session.setTimeout(SESSION_TIMEOUT);//
             session.connect();
             System.out.println("连接成功");
             Channel channel = session.openChannel("sftp");

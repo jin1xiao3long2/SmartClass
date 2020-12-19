@@ -56,40 +56,47 @@ public class LabelMouseListener implements MouseListener {//增加成员变量�
         List<ServerImg> imgs = mainWindow.mainApp.getImgs();
         selectedImage = imgs.get(0);
 
+
+
+
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
+//---------------------begin---------------------------
+        /*
+        JLabel userName = new JLabel();
+        userName.setBounds(75, 27, 480, 40);
+        Font font = new Font("宋体",Font.BOLD,32);
+        userName.setFont(font);
+        userName.setText("江安校区 第一教学楼B座 B304");
+        panel.add(userName);
+        */
+//----------------------end-----------------------------
+
         JLabel user = new JLabel("");
         user.setBounds(10, 27, 90, 24);
-        System.out.println(label.getName());
+//        System.out.println(label.getName());
         user.setText(label.getName());
         panel.add(user);
 
-        JButton option = new JButton();
-        option.setBounds(300, 27, 34, 28);
-        option.setText("设置");
-        option.setMargin(new Insets(0, 0, 0, 0));
-        option.addActionListener(new SwitchToOptionListener(option.getText(), mainWindow));
-        panel.add(option);
-
         JLabel label_1 = new JLabel("");
-        label_1.setBounds(43, 245, 90, 24);
+        label_1.setBounds(140, 280, 90, 24);
         label_1.setText("\u5F53\u524D\u58C1\u7EB8");
         panel.add(label_1);
 
         JLabel label_2 = new JLabel();
         label_2.addMouseListener(null);//mouseclick
         ImageIcon icon = new ImageIcon();//显示图片
-        icon.setImage(img.getImg().getScaledInstance(116, 81, Image.SCALE_DEFAULT));
+        icon.setImage(img.getImg().getScaledInstance(240, 160, Image.SCALE_DEFAULT));
         label_2.setIcon(icon);
-        label_2.setBounds(40, 147, 116, 81);
+        label_2.setBounds(40, 100, 240, 160);
         panel.add(label_2);
 
         JLabel label_3 = new JLabel("");
-        label_3.setBounds(424, 245, 90, 24);
+        label_3.setBounds(430, 280, 90, 24);
         label_3.setText("\u9009\u62E9\u58C1\u7EB8");
         panel.add(label_3);
 
@@ -103,9 +110,9 @@ public class LabelMouseListener implements MouseListener {//增加成员变量�
         }
         ImageIcon img2 = new ImageIcon(image);
 
-        img2.setImage(img2.getImage().getScaledInstance(116, 81, Image.SCALE_DEFAULT));
+        img2.setImage(img2.getImage().getScaledInstance(240, 160, Image.SCALE_DEFAULT));
         label_21.setIcon(img2);
-        label_21.setBounds(396, 147, 116, 81);
+        label_21.setBounds(340, 100, 240, 160);
 
         label_21.addMouseListener(new MouseListener() {
             @Override
@@ -114,12 +121,24 @@ public class LabelMouseListener implements MouseListener {//增加成员变量�
                 int row = 5;//5列
 
 
+
                 JFrame selectPic = new JFrame();
                 selectPic.setSize(480, 320);
                 selectPic.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
                 JPanel showPic = new JPanel();
                 showPic.setLayout(null);
+
+//-------------------begin--------------------------
+
+                JLabel title = new JLabel();
+                title.setBounds(160, 27, 480, 40);
+                Font font = new Font("宋体",Font.BOLD,32);
+                title.setFont(font);
+                title.setText("修改壁纸");
+                showPic.add(title);
+
+//-------------------end----------------------------
 
                 JLabel[] labelpics = new JLabel[imgs.size()];
 
@@ -208,7 +227,7 @@ public class LabelMouseListener implements MouseListener {//增加成员变量�
         panel.add(label_21);
 
         JButton button = new JButton();
-        button.setBounds(300, 325, 80, 34);
+        button.setBounds(420, 325, 80, 34);
         button.setText("返回");
         button.setMargin(new Insets(0, 0, 0, 0));
         button.addActionListener(new ActionListener() {
@@ -223,7 +242,7 @@ public class LabelMouseListener implements MouseListener {//增加成员变量�
 
         JButton del = new JButton();
         del.setText("删除");
-        del.setBounds(200, 325, 80, 34);
+        del.setBounds(260, 325, 80, 34);
         del.setMargin(new Insets(0, 0, 0, 0));
         del.addActionListener(new ActionListener() {
             @Override

@@ -48,7 +48,7 @@ public class LogBaseUtil {
                 file.createNewFile();
             sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = sdf.format(date);
-            String log = "时间:" + time + ", " + message + "\n";
+            String log = "时间:" + time + ", " + message;
             FileBaseUtil.appendlnFile(saveDir + "\\" + name + ".txt", log);
         }catch (Exception e){
 

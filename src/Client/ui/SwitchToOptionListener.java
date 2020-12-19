@@ -153,6 +153,7 @@ public class SwitchToOptionListener implements ActionListener{
 					});
 
 				frame.dispose();
+
 				mainWindow.repaint();
 			}
 		});

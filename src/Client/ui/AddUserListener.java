@@ -75,7 +75,7 @@ public class AddUserListener implements ActionListener {
         if (imgs != null) {
             if (imgs.size() != 0) {
                 selectedImage = imgs.get(0);
-                System.out.println("here");
+//                System.out.println("here");
                 if (selectedImage == null) {
                     return ;
                 }

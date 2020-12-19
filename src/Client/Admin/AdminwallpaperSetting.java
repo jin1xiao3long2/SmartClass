@@ -215,7 +215,7 @@ public class AdminwallpaperSetting {
     public void initImgs() throws Exception {
 
         String errorInfo = "获取服务器图片列表异常: ";
-
+        imgs = new ArrayList<>();
         try {
             check_server_info();
             ChannelSftp sftp = SftpBaseUtil.getConnectIP();
@@ -238,7 +238,6 @@ public class AdminwallpaperSetting {
             }
             SftpBaseUtil.disconnect(sftp);
         } catch (Exception e) {
-            imgs = new ArrayList<>();
             throw new Exception(errorInfo + e.getMessage());
         }
 

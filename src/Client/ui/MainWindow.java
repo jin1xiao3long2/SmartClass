@@ -34,9 +34,8 @@ public class MainWindow extends JFrame {
         panel.removeAll();
         placeComponentsHome(panel);
         JScrollPane scrollpane = new JScrollPane(panel);
-        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollpane = new JScrollPane(panel);
         this.scrollpane = scrollpane;
         this.frame.getContentPane().add(this.scrollpane);
         frame.invalidate();
@@ -45,9 +44,15 @@ public class MainWindow extends JFrame {
     }
 
     public void Init(AdminwallpaperSetting mainapp, Admin admin) {
-        frame.setPreferredSize(new Dimension(566, 410));
+        frame.setPreferredSize(new Dimension(640, 480));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        frame.setBounds(screenWidth / 4, screenHeight / 4, 640, 480);
         mainApp = mainapp;
+
         this.admin = admin;
         try {
             mainapp.init(admin);
@@ -56,18 +61,11 @@ public class MainWindow extends JFrame {
             System.exit(-1);
         }
 
-        try {
-            mainApp.initImgs();
-            mainApp.initServerFile();
-            showImgs = mainApp.getList();
-            placeComponentsHome(panel);
-        } catch (Exception e) {
-            placeComponentsHome(panel);
-            this.showWarning("初始化图片失败");
-        }
+        updateData();
+        placeComponentsHome(panel);
         panel.setPreferredSize(new Dimension(640, 480));
         JScrollPane scrollpane = new JScrollPane(panel);
-        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollpane = scrollpane;
         frame.getContentPane().add(this.scrollpane);
@@ -75,7 +73,6 @@ public class MainWindow extends JFrame {
         frame.pack();
         frame.setVisible(true);
     }
-
 
     public static class ChangePageListener implements ActionListener//点击返回键的操作
     {
@@ -106,37 +103,124 @@ public class MainWindow extends JFrame {
         }
     }
 
+    public void updateData() {
+        JDialog jDialog = new JDialog(frame, "正在初始化图片");
+//        jDialog.setPreferredSize(new Dimension(120, 35));
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        jDialog.setBounds(screenWidth / 2 -  120, screenHeight / 2 - 15 , 180, 60);
+        jDialog.setAlwaysOnTop(true);
+        jDialog.setModal(false);
+        jDialog.setVisible(true);
+
+        try {
+            mainApp.initImgs();
+            mainApp.initServerFile();
+
+            jDialog.setVisible(false);
+            jDialog.dispose();
+        } catch (Exception e) {
+
+            jDialog.setVisible(false);
+            jDialog.dispose();
+            this.showWarning("初始化图片失败: " + e.getMessage());
+        } finally {
+            try {
+                showImgs = mainApp.getList();
+            } catch (Exception ex) {
+                ;
+            }
+        }
+    }
+
 
     public void placeComponentsHome(JPanel panel)//在页面中放置组件
     {//base on list get paint the panel
         panel.setLayout(null);
 
         JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setBounds(223, 74, 126, 24);
-        lblNewLabel.setText("各教室状况");
+        lblNewLabel.setBounds(120, 16, 400, 40);
+        Font font = new Font("宋体",Font.BOLD,40);
+        lblNewLabel.setFont(font);
+        lblNewLabel.setText("四川大学壁纸管理");
         panel.add(lblNewLabel);
 
-        JButton addNewUserButton = new JButton("");
-        addNewUserButton.setText("增加用户");
-        addNewUserButton.setBounds(400, 74, 60, 20);
-        addNewUserButton.setMargin(new Insets(0, 0, 0, 0));
+        /*
+        -----------------------begin------------------------
+         */
+        /*
+        JComboBox<String> campusComboBox=new JComboBox<>();
+        campusComboBox.addItem("望江校区");
+        campusComboBox.addItem("江安校区");
+        campusComboBox.addItem("华西校区");
+        campusComboBox.setBounds(10, 70, 80, 21);
+        panel.add(campusComboBox);
+
+        JComboBox<String> BuidingComboBox=new JComboBox<>();
+        BuidingComboBox.addItem("第一教学楼A座");
+        BuidingComboBox.addItem("第一教学楼B座");
+        BuidingComboBox.addItem("第一教学楼C座");
+        BuidingComboBox.addItem("第一教学楼D座");
+        BuidingComboBox.addItem("文科楼一座");
+        BuidingComboBox.addItem("文科楼二座");
+        BuidingComboBox.addItem("文科楼三座");
+        BuidingComboBox.setBounds(100, 70, 100, 21);
+        panel.add(BuidingComboBox);
+
+        JComboBox<String> FloorComboBox=new JComboBox<>();
+        FloorComboBox.addItem("f1");
+        FloorComboBox.addItem("f2");
+        FloorComboBox.addItem("f3");
+        FloorComboBox.addItem("f4");
+        FloorComboBox.addItem("f5");
+        FloorComboBox.addItem("f6");
+        FloorComboBox.setBounds(210, 70, 80, 21);
+        panel.add(FloorComboBox);
+
+        
+         */
+        /*
+        -----------------------end-------------------------
+         */
 
         JButton option = new JButton();
-        option.setBounds(300, 27, 34, 28);
         option.setText("设置");
+        option.setSelected(false);
+        option.setBounds(347, 74, 34, 20);
         option.setMargin(new Insets(0, 0, 0, 0));
         option.addActionListener(new SwitchToOptionListener(option.getText(), this));
         panel.add(option);
 
+        JButton flush = new JButton();
+        flush.setBounds(396, 74, 34, 20);
+        flush.setText("刷新");
+        flush.setMargin(new Insets(0, 0, 0, 0));
+        flush.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateData();
+                repaint();
+            }
+        });
+        panel.add(flush);
+
+        JButton addNewUserButton = new JButton("");
+        addNewUserButton.setText("增加用户");
+        addNewUserButton.setBounds(445, 74, 60, 20);
+        addNewUserButton.setMargin(new Insets(0, 0, 0, 0));
+        addNewUserButton.addActionListener(new AddUserListener(this));
+        panel.add(addNewUserButton);
+
         JButton PicArchiveButton = new JButton();
         PicArchiveButton.setText("图片库");
-        PicArchiveButton.setBounds(470, 74, 60, 20);
+        PicArchiveButton.setBounds(520, 74, 60, 20);
         PicArchiveButton.setMargin(new Insets(0, 0, 0, 0));
         PicArchiveButton.addActionListener(new PicArchiveListener(this));
         panel.add(PicArchiveButton);
 
-        addNewUserButton.addActionListener(new AddUserListener(this));
-        panel.add(addNewUserButton);
+
 
 
         if (showImgs == null) {
@@ -165,7 +249,7 @@ public class MainWindow extends JFrame {
 
                     } else {
                         ImageIcon img = new ImageIcon(showImgs.get(index).getImg());//获取图像
-                        img.setImage(img.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
+                        img.setImage(img.getImage().getScaledInstance(80, 60, Image.SCALE_DEFAULT));
                         labelpics[index] = new JLabel();
                         labelpics[index].setBounds(37 + j * 118, 110 + i * 84, 80, 60);
                         labelpics[index].setIcon(img);
@@ -276,11 +360,14 @@ public class MainWindow extends JFrame {
     }
 
     public void setData(Data data, RequestFinishListener listener) {
+
         try {
             mainApp.setData(data);
             listener.log("修改成功");
-        } catch (Exception e){
+        } catch (Exception e) {
             listener.error(e);
+        } finally {
+            updateData();
         }
     }
 
