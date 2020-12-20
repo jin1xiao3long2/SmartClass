@@ -236,4 +236,9 @@ public class test {
         ls.add("abc");
         System.out.println(ls);
     }
+
+    @Test
+    public void testInit(){
+        Admin admin;
+    }
 }

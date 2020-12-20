@@ -179,7 +179,7 @@ public class MainWindow extends JFrame {
         FloorComboBox.setBounds(210, 70, 80, 21);
         panel.add(FloorComboBox);
 
-        
+
          */
         /*
         -----------------------end-------------------------

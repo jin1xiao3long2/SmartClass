@@ -45,8 +45,6 @@ public class AdminwallpaperSetting {
         adminFile = admin.getAdminFile();
         try {
             checkFile(configRootPath);
-
-
 //      configFilePath include
             configFilePath = initFile(configRootPath);
 //            JsonBaseUtil.ObjtoSting(adminFile);
@@ -62,7 +60,6 @@ public class AdminwallpaperSetting {
 //        修改adminFile数据
 
 //        同步检测
-
 
 //        数据获取
         String errorInfo = "添加用户失败: ";
@@ -193,7 +190,8 @@ public class AdminwallpaperSetting {
 
 
     public Data getData() {
-        return new Data(server.HOST, server.PORT, server.USERNAME, server.PASSWORD, server.HTTP_ROOT, adminFile.getUSER_ROOT(), adminFile.getNameBase());
+        return new Data(server.HOST, server.PORT, server.USERNAME, server.PASSWORD,
+                server.HTTP_ROOT, adminFile.getUSER_ROOT(), adminFile.getNameBase());
     }
 
     public void initServerFile() throws Exception {
@@ -213,15 +211,12 @@ public class AdminwallpaperSetting {
 
     //    获取图片列表
     public void initImgs() throws Exception {
-
         String errorInfo = "获取服务器图片列表异常: ";
         imgs = new ArrayList<>();
         try {
             check_server_info();
             ChannelSftp sftp = SftpBaseUtil.getConnectIP();
             List<String> fileList = SftpBaseUtil.check(server.HTTP_ROOT, sftp);
-//        System.out.println(fileList);
-
             Iterator iter = fileList.iterator();
             byte[] data = new byte[0];
             while (iter.hasNext()) {
@@ -240,7 +235,6 @@ public class AdminwallpaperSetting {
         } catch (Exception e) {
             throw new Exception(errorInfo + e.getMessage());
         }
-
 //        初始化默认图片
         initDefaultImg(imgs);
     }
@@ -307,14 +301,10 @@ public class AdminwallpaperSetting {
      * @param imgname 图片名
      */
     public void delPic(String imgname) throws Exception {
-
         String errorInfo = "删除图片异常: ";
-
 //        获取数据
-
         Map<String, String> nimap = adminFile.getNimap();
         Map<String, String> changeMap = new HashMap<>();
-
         ServerImg originDefault = (defaultImg == null) ? null : defaultImg;
 //        修改数据
         for (Map.Entry<String, String> e : nimap.entrySet()) {
@@ -330,7 +320,6 @@ public class AdminwallpaperSetting {
                 }
             }
         }
-
         adminFile.setNimap(nimap);
         if (defaultImg != null) {
             if (imgname.equals(defaultImg.getUrl())) {
@@ -425,6 +414,18 @@ public class AdminwallpaperSetting {
         }
     }
 
+    public Server getServer() {
+        return server;
+    }
+
+    public String getUser_root() {
+        return this.adminFile.getUSER_ROOT();
+    }
+
+    public String getName_Base() {
+        return this.adminFile.getNameBase();
+    }
+
     //    管理员文件(configRootPath\wallpaper\settings.json)init
     private String initFile(String projectPath) throws Exception {
 
@@ -503,8 +504,8 @@ public class AdminwallpaperSetting {
     }
 
     //可改为抛异常
-    private void checkFile(String projectPath) throws Exception {
-        File file = new File(projectPath);
+    private void checkFile(String filePath) throws Exception {
+        File file = new File(filePath);
         if (!file.exists())
             throw new Exception("路径错误");
     }
@@ -553,9 +554,7 @@ public class AdminwallpaperSetting {
         }
     }
 
-    public Server getServer() {
-        return server;
-    }
+
 
     private void check_server_info() throws Exception {
 
@@ -579,9 +578,7 @@ public class AdminwallpaperSetting {
         }
     }
 
-    public String getUser_root() {
-        return this.adminFile.getUSER_ROOT();
-    }
+
 
     private void setName_Base(String name_base) throws Exception {
         String originNameBase = this.adminFile.getNameBase();
@@ -594,9 +591,7 @@ public class AdminwallpaperSetting {
         }
     }
 
-    public String getName_Base() {
-        return this.adminFile.getNameBase();
-    }
+
 
     private void updateServerFile(ChannelSftp sftp) throws Exception {
 //        get file info
