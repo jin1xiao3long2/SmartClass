@@ -84,7 +84,7 @@ public class JsonBaseUtil {
 
     public static void delDataInArr(JSONObject obj, String key, String skey, Object value){
         JSONArray array = obj.getJSONArray(key);
-        Iterator iter = array.stream().iterator();
+        Iterator iter = array.iterator();
         while(iter.hasNext()){
             JSONObject element = (JSONObject) iter.next();
             if(element.get(skey) == value){

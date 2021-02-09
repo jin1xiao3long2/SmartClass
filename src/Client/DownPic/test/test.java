@@ -1,15 +1,16 @@
 package Client.DownPic.test;
 
 //import Client.Admin.AdminwallpaperSetting;
+import Client.Admin.AdminwallpaperSetting;
 import Client.DownPic.listener.RequestFinishListener;
-import Client.DownPic.utils.BaseUtils.FileBaseUtil;
-import Client.DownPic.utils.BaseUtils.ImgBaseUtil;
-import Client.DownPic.utils.BaseUtils.JsonBaseUtil;
+import Client.DownPic.utils.BaseUtils.*;
 import entity.*;
 import entity.ServerImg;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
+
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,79 +22,52 @@ import java.io.*;
 public class test {
 
     @Test
-    public void test3(){
-        try{
-            ServerImg img = new ServerImg();
-//            img.setId(1);
-//            img.setUrl("abc");
-            ServerImg img2 = new ServerImg();
-//            img2.setId(2);
-//            img2.setUrl("def");
-            ServerFile file = new ServerFile();
-//            file.addImg(img);
-//            file.addImg(img2);
-            java.lang.String str1 = JsonBaseUtil.ObjtoSting(img);
-            java.lang.String str2 = JsonBaseUtil.ObjtoSting(file);
-            System.out.println(str1);
-            System.out.println(str2);
-            JSONObject obj1 = JSONObject.fromObject(img);
-            JSONObject obj2 = JSONObject.fromObject(str1);
-            System.out.println(obj1);
-            System.out.println(obj2);
-            int id = obj1.getInt("id");
-            System.out.println(id);
-            JSONObject obj3 = JSONObject.fromObject(file);
-            JSONArray obj4 = obj3.getJSONArray("imgs");
-            System.out.println(obj4.getJSONObject(1).toString());
-            System.out.println(obj4.getJSONObject(1).getInt("id"));
-            obj4.add(obj1);
-            System.out.println(obj3);
-            //            JSONObject obj2 = obj1.getJSONObject("imgs");
-//            System.out.println(obj2.toString());
-            JSONArray jsonArray = null;
-            if(obj1 != null){
-                obj1.toJSONArray(jsonArray);
-            }
+    public void testJSON(){
+        User user = new User();
+        user.setName("韩尚坤");
+        user.setUrl("测试url");
+        AdminFile adminFile = new AdminFile();
+        try {
+            String jsonStr = JsonBaseUtil.ObjtoSting(user);
+            System.out.println("测试JSONBaseUtil.ObjToString(obj)  " + jsonStr);
+            JSONObject obj = JSONObject.fromObject(adminFile);
+            System.out.println("查看原始数据 " + obj);
+            JsonBaseUtil.addDataInArr(obj, "USERS", user);
+            System.out.println("查看添加后数据 " + obj);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     @Test
-    public void test4(){
-        entity.Server server = new Server();
-        server.setHOST("192.168.26.128"); //改
-        server.setPORT("22");
-        server.setUSERNAME("jol");
-        server.setPASSWORD("jxda7797797");
-        server.setHTTP_ROOT("/home/jola/wallpaper");
-        AdminFile mainUser = new AdminFile();
-//        mainUser.setFilepath("D:\\JAVAProjects\\SmartClass");
-//        wallpaperSetting MainSetting = new wallpaperSetting();
-//        MainSetting.init(server, mainUser);
-//        LogBaseUtil.init(mainUser.getFilepath());
-//        MainSetting.uploadPic(mainUser.getFilepath()+"\\wallpaper\\imgs\\1.jpg");
+    public void testFile(){
+        String PathRoot = "D:\\JAVAprojects\\韩尚坤";
+        try{
+            String testFilename = PathRoot + "\\test.txt";
+            FileBaseUtil.createFile(testFilename);
+            FileBaseUtil.appendlnFile(testFilename, "first line word");
+            FileBaseUtil.appendlnFile(testFilename, "new line word");
+            String text = FileBaseUtil.readFile(testFilename);
+            System.out.println(text);
+            FileBaseUtil.writeFile(testFilename, "testWord");
+            text = FileBaseUtil.readFile(testFilename);
+            System.out.println(text);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void test5(){
-        Map<String, String> map = new HashMap<>();
-        map.put("abc", "cba");
-        JSONObject obj1 = JSONObject.fromObject(map);
-        System.out.println(obj1);
-        map.put("aaa", "ccc");
-        obj1 = JSONObject.fromObject(map);
-        System.out.println(obj1);
+    public void testLogBase(){
 
-        Iterator iter = map.values().iterator();
-        String de = "ccc";
-        while(iter.hasNext()){
-            String info = (String) iter.next();
-            if(info.equals(de))
-                info = "aa";
-        }
-        obj1 = JSONObject.fromObject(map);
-        System.out.println(obj1);
+        String PathRoot = "D:\\JAVAprojects\\韩尚坤";
+        LogBaseUtil.init(PathRoot);
+        LogBaseUtil.saveLog(1, "success1");
+        LogBaseUtil.saveLog(1, "success2");
+        LogBaseUtil.saveLog(1, "success3");
+        LogBaseUtil.saveLog(0, "fail1");
+        LogBaseUtil.saveLog(0, "fail2");
+        LogBaseUtil.saveLog(0, "fail3");
 
 
     }
@@ -130,36 +104,11 @@ public class test {
     }
 
     @Test
-    public void test6(){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", "value");
-        jsonObject.put("key", "123");
-        Foo foo =(Foo) JSONObject.toBean(jsonObject, Foo.class);
-        System.out.println(foo.name + foo.key);
-        JSONArray array = new JSONArray();
-        array.add(jsonObject);
-        jsonObject.put("name", "vvallue");
-        jsonObject.put("key", "2233");
-        array.add(jsonObject);
-        JSONObject mainObj = new JSONObject();
-        mainObj.put("arr", array);
+    public void testImgBase(){
+        Server server = new Server();
+        server.HOST = "192.168.233.108";
+        server.PORT = "22";
 
-//        System.out.println(array);
-//        System.out.println(mainObj);
-        jsonObject.put("name", "hh");
-        jsonObject.put("key","333");
-        JsonBaseUtil.addDataInArr(mainObj, "arr", jsonObject);
-        System.out.println(mainObj);
-//        List<String> list = (List)JSONArray.toCollection(mainObj.getJSONArray("arr"), Foo.class);
-        JSONArray arr = mainObj.getJSONArray("arr");
-        int length = arr.size();
-        for(int i = 0; i < length; i++){
-            JSONObject obj = JSONObject.fromObject(arr.getString(i));
-            System.out.println(obj);
-        }
-//        System.out.println("List is : " + list);
-        JsonBaseUtil.delDataInArr(mainObj, "arr", "name", (Object)"value");
-        System.out.println(mainObj);
 
     }
 
@@ -238,7 +187,22 @@ public class test {
     }
 
     @Test
-    public void testInit(){
-        Admin admin;
+    public void testaddUser(){
+        Admin admin = new Admin();
+        AdminFile adminFile = new AdminFile();
+        admin.setAdminFile(adminFile);
+        admin.setProjectPath("D:\\JAVAProjects\\SmartClass\\test");
+        AdminwallpaperSetting mainApp = new AdminwallpaperSetting();
+        try{
+            mainApp.init(admin);
+//            mainApp.initServerFile();
+            mainApp.initImgs();
+            User user = new User();
+            user.setUrl("url1");
+            user.setName("江安校区一教B304");
+            mainApp.addUser(user, "img2.jpg");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

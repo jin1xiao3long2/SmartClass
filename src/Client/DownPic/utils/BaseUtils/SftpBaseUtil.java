@@ -35,7 +35,6 @@ public class SftpBaseUtil {
         ChannelSftp sftp = null;
         try {
             JSch jsch = new JSch();
-//            jsch.getSession(USERNAME, REMOTE_HOST, port);
             session = jsch.getSession(USERNAME, REMOTE_HOST, port);
             System.out.println("正在连接服务器...");
             session.setPassword(PASSWORD);
@@ -48,13 +47,9 @@ public class SftpBaseUtil {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
-//            listener.log(USERNAME);
-//            LogBaseUtil.saveLog(Log, "连接服务器 :" + USERNAME + " 成功");
+
         } catch (Exception e) {
             throw new Exception("服务器连接失败");
-//            listener.error(e);
-//            LogBaseUtil.saveLog(Log, "连接服务器失败, 异常信息请查看error文件");
-//            LogBaseUtil.saveLog(Ex, "连接服务器 :" + USERNAME + " 异常:" + e.toString());
         }
         return sftp;
     }
