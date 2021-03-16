@@ -270,7 +270,6 @@ public class MainWindow extends JFrame {
         } catch (Exception e) {
             listener.error(e);
         }
-
 //		frame.validate();
     }
 

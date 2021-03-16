@@ -1,1 +1,1 @@
-{"SERVER":{"HOST":"192.168.43.174","HTTP_ROOT":"/home/jola/projectPath","PASSWORD":"jxda7797797","PORT":"22","USERNAME":"jola"},"USERS":[{"name":"教学楼","url":"url"},{"name":"二基楼报告厅","url":"url"}],"USER_ROOT":"user_root","defaultImgurl":"","nameBase":"img","nimap":{"二基楼报告厅":"img3.jpg","教学楼":"img3.jpg"}}
+{"SERVER":{"HOST":"192.168.43.174","HTTP_ROOT":"/home/jola/projectPath","PASSWORD":"jxda7797797","PORT":"22","USERNAME":"jola"},"USERS":[{"name":"第一教学楼A座301","url":"url"}],"USER_ROOT":"url","defaultImgUrl":"","nameBase":"img","nimap":{"第一教学楼A座301":"img2.jpg"}}

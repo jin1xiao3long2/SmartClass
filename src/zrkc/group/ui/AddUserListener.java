@@ -17,13 +17,13 @@ import zrkc.group.javabean.ServerImg;
 import zrkc.group.javabean.User;
 
 public class AddUserListener implements ActionListener {
+
     private JFrame frame;
     private List<ServerImg> imgs = new ArrayList<>();
     private ServerImg selectedImage = null;
     public MainWindow mainWindow;
     private final int SUCCESS = 1;
     private final int FAILED = 0;
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -37,7 +37,6 @@ public class AddUserListener implements ActionListener {
 
         addUserFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
-
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
@@ -50,7 +49,6 @@ public class AddUserListener implements ActionListener {
         UserName.setText("user");
         UserName.setBounds(97, 10, 196, 30);
         panel.add(UserName);
-
 
         JLabel UrlLabel = new JLabel();
         UrlLabel.setText("URL:");
